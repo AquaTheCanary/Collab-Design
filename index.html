@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +8,86 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
 
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 max-w-md w-full">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 max-w-md w-full relative overflow-hidden">
         
+        <!-- Progress Bar Header -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center text-xs text-slate-400 font-medium mb-2">
+                <span id="progress-step-text">STEP 1 OF 4</span>
+                <span id="progress-percent-text">25%</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-500 h-2 rounded-full w-1/4 transition-all duration-500 ease-out"></div>
+            </div>
+        </div>
+
+        <!-- Step 1: Email First -->
+        <div id="step-email" class="space-y-5">
+            <h2 class="text-3xl font-bold text-white">Welcome!</h2>
+            <p class="text-slate-400">Let's get you going. Enter your email address to begin setup.</p>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
+                <input type="email" id="email-input" placeholder="you@example.com" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
+            </div>
+            <p id="email-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
+            <button onclick="sendVerificationCode()" id="send-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                <span>Send Verification Code</span>
+            </button>
+        </div>
+
+        <!-- Step 2: Verification Code -->
+        <div id="step-verify" class="space-y-5 hidden">
+            <h2 class="text-3xl font-bold text-white">Check Your Email</h2>
+            <p class="text-slate-400">We sent a 6-digit verification code to <span id="sent-email-display" class="text-indigo-400 font-semibold break-all"></span>.</p>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">6-Digit Code</label>
+                <input type="text" id="code-input" maxlength="6" placeholder="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center tracking-widest text-2xl font-mono text-white placeholder-slate-500">
+            </div>
+            <p id="code-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
+            
+            <button onclick="verifyCode()" id="verify-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                <span id="verify-btn-text">Verify Email</span>
+                <svg id="verify-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5Here is the complete **`index.html`** with a modern progress bar and a smooth, decorative loading animation when verifying the 6-digit code.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Setup</title>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <style>
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            width: 1.25rem;
+            height: 1.25rem;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
+
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 max-w-md w-full relative overflow-hidden">
+        
+        <!-- Setup Progress Bar Header -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
+                <span id="progress-text">Step 1 of 3: Email Verification</span>
+                <span id="progress-percent">33%</span>
+            </div>
+            <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-500 ease-out" style="width: 33%;"></div>
+            </div>
+        </div>
+
         <!-- Step 1: Email First -->
         <div id="step-email" class="space-y-5">
             <h2 class="text-3xl font-bold text-white">Welcome!</h2>
@@ -32,7 +109,10 @@
                 <input type="text" id="code-input" maxlength="6" placeholder="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center tracking-widest text-2xl font-mono text-white placeholder-slate-500">
             </div>
             <p id="code-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
-            <button onclick="verifyCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Verify Email</button>
+            <button onclick="verifyCode()" id="verify-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                <span id="verify-spinner" class="spinner hidden"></span>
+                <span id="verify-btn-text">Verify Email</span>
+            </button>
         </div>
 
         <!-- Step 3: Name -->
@@ -55,18 +135,26 @@
                 <input type="number" id="age-input" placeholder="18" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
             </div>
             <p id="age-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
-            <button onclick="submitAge()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Complete Setup</button>
+            <button onclick="submitAge()" id="age-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                <span id="age-spinner" class="spinner hidden"></span>
+                <span id="age-btn-text">Complete Setup</span>
+            </button>
         </div>
 
     </div>
 
     <script>
-        // Set to your Vercel backend URL (Do NOT include a trailing slash /)
-        const VERCEL_API_URL = "https://email-backend-gamma.vercel.app";
+        const VERCEL_API_URL = "[https://email-backend-gamma.vercel.app](https://email-backend-gamma.vercel.app)";
 
         let userEmail = "";
         let userName = "";
         let expectedCode = "";
+
+        function updateProgress(stepNumber, text, percent) {
+            document.getElementById('progress-text').innerText = text;
+            document.getElementById('progress-percent').innerText = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
 
         function showStep(stepId) {
             ['step-email', 'step-verify', 'step-name', 'step-age'].forEach(id => {
@@ -109,6 +197,7 @@
                 if (response.ok && result.success) {
                     expectedCode = result.code;
                     document.getElementById('sent-email-display').innerText = userEmail;
+                    updateProgress(1, "Step 1 of 3: Enter Code", 33);
                     showStep('step-verify');
                 } else {
                     errorEl.innerText = result.error || result.message || `Failed to send email (Status ${response.status}).`;
@@ -126,14 +215,32 @@
         function verifyCode() {
             const enteredCode = document.getElementById('code-input').value.trim();
             const errorEl = document.getElementById('code-error');
+            const btn = document.getElementById('verify-btn');
+            const btnText = document.getElementById('verify-btn-text');
+            const spinner = document.getElementById('verify-spinner');
 
-            if (enteredCode === expectedCode) {
-                errorEl.classList.add('hidden');
-                showStep('step-name');
-            } else {
+            if (enteredCode !== expectedCode) {
                 errorEl.innerText = "Incorrect verification code. Please check your email and try again.";
                 errorEl.classList.remove('hidden');
+                return;
             }
+
+            errorEl.classList.add('hidden');
+            
+            // Show decorative loading state
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            btnText.innerText = "Verifying code...";
+
+            // Decorative delay (1.8 seconds) to simulate deep verification
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                btnText.innerText = "Verify Email";
+                btn.disabled = false;
+
+                updateProgress(2, "Step 2 of 3: Enter Name", 66);
+                showStep('step-name');
+            }, 1800);
         }
 
         function submitName() {
@@ -141,12 +248,16 @@
             if (!userName) return;
 
             document.getElementById('age-greeting').innerText = `OK, ${userName}, let's give you the right experience. How old are you?`;
+            updateProgress(3, "Step 3 of 3: Confirm Age", 90);
             showStep('step-age');
         }
 
         function submitAge() {
             const age = parseInt(document.getElementById('age-input').value);
             const errorEl = document.getElementById('age-error');
+            const btn = document.getElementById('age-btn');
+            const btnText = document.getElementById('age-btn-text');
+            const spinner = document.getElementById('age-spinner');
 
             if (isNaN(age)) {
                 errorEl.innerText = "Please enter a valid number for your age.";
@@ -158,8 +269,17 @@
                 errorEl.innerText = `Sorry, ${userName}, you need to be at least 18 years old to register for this.`;
                 errorEl.classList.remove('hidden');
             } else {
-                // Success - Redirect to Google
-                window.location.href = "https://www.google.com";
+                errorEl.classList.add('hidden');
+                
+                // Show decorative completion state
+                btn.disabled = true;
+                spinner.classList.remove('hidden');
+                btnText.innerText = "Completing registration...";
+                updateProgress(3, "Setup Complete!", 100);
+
+                setTimeout(() => {
+                    window.location.href = "[https://www.google.com](https://www.google.com)";
+                }, 1200);
             }
         }
     </script>
