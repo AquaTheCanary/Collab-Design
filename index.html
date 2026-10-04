@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
     <title>Account Setup</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
 
     <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 max-w-md w-full">
         
@@ -18,49 +19,49 @@
                 <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
                 <input type="email" id="email-input" placeholder="you@example.com" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
             </div>
-            <p id="email-error" class="text-red-400 text-sm hidden"></p>
-            <button onclick="sendVerificationCode()" id="send-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition duration-200">Send Verification Code</button>
+            <p id="email-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
+            <button onclick="sendVerificationCode()" id="send-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Send Verification Code</button>
         </div>
 
         <!-- Step 2: Verification Code -->
         <div id="step-verify" class="space-y-5 hidden">
             <h2 class="text-3xl font-bold text-white">Check Your Email</h2>
-            <p class="text-slate-400">We sent a 6-digit code to <span id="sent-email-display" class="text-indigo-400 font-semibold"></span>.</p>
+            <p class="text-slate-400">We sent a 6-digit verification code to <span id="sent-email-display" class="text-indigo-400 font-semibold break-all"></span>.</p>
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">6-Digit Code</label>
-                <input type="text" id="code-input" maxlength="6" placeholder="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center tracking-widest text-xl text-white placeholder-slate-500">
+                <input type="text" id="code-input" maxlength="6" placeholder="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center tracking-widest text-2xl font-mono text-white placeholder-slate-500">
             </div>
-            <p id="code-error" class="text-red-400 text-sm hidden"></p>
-            <button onclick="verifyCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition duration-200">Verify Email</button>
+            <p id="code-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
+            <button onclick="verifyCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Verify Email</button>
         </div>
 
         <!-- Step 3: Name -->
         <div id="step-name" class="space-y-5 hidden">
             <h2 class="text-3xl font-bold text-white">Email Verified!</h2>
-            <p class="text-slate-400">Step 1: What is your name?</p>
+            <p class="text-slate-400">Step 1<br><span class="text-lg font-medium text-slate-200">What is your name?</span></p>
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Your Name</label>
-                <input type="text" id="name-input" placeholder="John" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
+                <input type="text" id="name-input" placeholder="Archie" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
             </div>
-            <button onclick="submitName()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition duration-200">Continue</button>
+            <button onclick="submitName()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Continue</button>
         </div>
 
         <!-- Step 4: Age Check -->
         <div id="step-age" class="space-y-5 hidden">
             <h2 class="text-3xl font-bold text-white">Step 2</h2>
-            <p id="age-greeting" class="text-slate-400"></p>
+            <p id="age-greeting" class="text-slate-200 text-lg font-medium"></p>
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">How old are you?</label>
                 <input type="number" id="age-input" placeholder="18" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-slate-500">
             </div>
-            <p id="age-error" class="text-red-400 text-sm hidden"></p>
-            <button onclick="submitAge()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition duration-200">Complete Registration</button>
+            <p id="age-error" class="text-red-400 text-sm hidden bg-red-950/50 border border-red-800 p-3 rounded-lg leading-relaxed"></p>
+            <button onclick="submitAge()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">Complete Setup</button>
         </div>
 
     </div>
 
     <script>
-        // PASTE YOUR VERCEL PRODUCTION URL HERE (Do NOT include a trailing slash)
+        // Set to your Vercel backend URL (Do NOT include a trailing slash /)
         const VERCEL_API_URL = "https://email-backend-gamma.vercel.app";
 
         let userEmail = "";
@@ -79,7 +80,7 @@
             const errorEl = document.getElementById('email-error');
             const btn = document.getElementById('send-btn');
 
-            if (!userEmail.includes('@')) {
+            if (!userEmail.includes('@') || !userEmail.includes('.')) {
                 errorEl.innerText = "Please enter a valid email address.";
                 errorEl.classList.remove('hidden');
                 return;
@@ -96,18 +97,25 @@
                     body: JSON.stringify({ email: userEmail })
                 });
 
-                const result = await response.json();
+                const rawText = await response.text();
+                let result;
+                
+                try {
+                    result = JSON.parse(rawText);
+                } catch (e) {
+                    throw new Error(`Server Error (${response.status}): ${rawText.slice(0, 120)}...`);
+                }
 
-                if (result.success) {
+                if (response.ok && result.success) {
                     expectedCode = result.code;
                     document.getElementById('sent-email-display').innerText = userEmail;
                     showStep('step-verify');
                 } else {
-                    errorEl.innerText = result.error || "Failed to send verification email.";
+                    errorEl.innerText = result.error || result.message || `Failed to send email (Status ${response.status}).`;
                     errorEl.classList.remove('hidden');
                 }
             } catch (err) {
-                errorEl.innerText = "Could not connect to Vercel API. Check your VERCEL_API_URL.";
+                errorEl.innerText = err.message || "Failed to connect to backend.";
                 errorEl.classList.remove('hidden');
             } finally {
                 btn.innerText = "Send Verification Code";
@@ -120,9 +128,10 @@
             const errorEl = document.getElementById('code-error');
 
             if (enteredCode === expectedCode) {
+                errorEl.classList.add('hidden');
                 showStep('step-name');
             } else {
-                errorEl.innerText = "Incorrect verification code. Please try again.";
+                errorEl.innerText = "Incorrect verification code. Please check your email and try again.";
                 errorEl.classList.remove('hidden');
             }
         }
@@ -131,7 +140,7 @@
             userName = document.getElementById('name-input').value.trim();
             if (!userName) return;
 
-            document.getElementById('age-greeting').innerText = `OK, ${userName}, let's finish setting up.`;
+            document.getElementById('age-greeting').innerText = `OK, ${userName}, let's give you the right experience. How old are you?`;
             showStep('step-age');
         }
 
@@ -140,13 +149,13 @@
             const errorEl = document.getElementById('age-error');
 
             if (isNaN(age)) {
-                errorEl.innerText = "Please enter a valid age.";
+                errorEl.innerText = "Please enter a valid number for your age.";
                 errorEl.classList.remove('hidden');
                 return;
             }
 
             if (age < 18) {
-                errorEl.innerText = `Sorry ${userName}, you need to be at least 18 years old to register for this.`;
+                errorEl.innerText = `Sorry, ${userName}, you need to be at least 18 years old to register for this.`;
                 errorEl.classList.remove('hidden');
             } else {
                 // Success - Redirect to Google
