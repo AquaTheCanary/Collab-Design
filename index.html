@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Setup</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    .step {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+
+    input, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        box-sizing: border-box;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .message {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>Welcome!</h1>
+<p>Let's get you going.</p>
+
+<!-- Step 1 -->
+<div id="step1" class="step active">
+    <h2>Step 1</h2>
+    <label>What is your name?</label>
+    <input type="text" id="name">
+    <button onclick="nextToAge()">Continue</button>
+</div>
+
+<!-- Step 2 -->
+<div id="step2" class="step">
+    <h2>Step 2</h2>
+    <label>How old are you?</label>
+    <input type="number" id="age">
+    <button onclick="checkAge()">Continue</button>
+</div>
+
+<!-- Underage -->
+<div id="underage" class="step">
+    <h2>Access Denied</h2>
+    <p id="underageMessage"></p>
+</div>
+
+<!-- Step 3 -->
+<div id="step3" class="step">
+    <h2>Step 3</h2>
+    <p>Let's verify your email.</p>
+    <input type="email" id="email" placeholder="Email address">
+    <button onclick="sendCode()">Send Verification Code</button>
+
+    <div id="verificationSection" style="display:none;">
+        <input type="text" id="codeInput" placeholder="Enter 6-digit code">
+        <button onclick="verifyCode()">Verify</button>
+    </div>
+
+    <div class="message" id="message"></div>
+</div>
+
+<!-- Complete -->
+<div id="complete" class="step">
+    <h2>Verification Successful!</h2>
+    <p>Your account setup is complete.</p>
+</div>
+
+<script>
+let userName = "";
+let verificationCode = "";
+
+function showStep(id) {
+    document.querySelectorAll(".step").forEach(step => {
+        step.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+}
+
+function nextToAge() {
+    userName = document.getElementById("name").value.trim();
+
+    if (!userName) {
+        alert("Please enter your name.");
+        return;
+    }
+
+    showStep("step2");
+}
+
+function checkAge() {
+    const age = parseInt(document.getElementById("age").value);
+
+    if (isNaN(age)) {
+        alert("Please enter a valid age.");
+        return;
+    }
+
+    if (age < 18) {
+        document.getElementById("underageMessage").textContent =
+            `Sorry, ${userName}, you need to be at least 18 years old to register for this.`;
+
+        showStep("underage");
+    } else {
+        showStep("step3");
+    }
+}
+
+function sendCode() {
+    const email = document.getElementById("email").value.trim();
+
+    if (!email) {
+        alert("Please enter an email address.");
+        return;
+    }
+
+    verificationCode =
+        Math.floor(100000 + Math.random() * 900000).toString();
+
+    // DEMO ONLY
+    alert(
+        `Demo Mode\n\nVerification code for ${email}: ${verificationCode}`
+    );
+
+    document.getElementById("verificationSection").style.display = "block";
+    document.getElementById("message").textContent =
+        "Verification code generated. Check the alert.";
+}
+
+function verifyCode() {
+    const enteredCode =
+        document.getElementById("codeInput").value.trim();
+
+    if (enteredCode === verificationCode) {
+        showStep("complete");
+    } else {
+        document.getElementById("message").textContent =
+            "Incorrect code. Please try again.";
+    }
+}
+</script>
+
+</body>
+</html>
