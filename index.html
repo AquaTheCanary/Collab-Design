@@ -181,7 +181,7 @@
                 btnText.innerText = "Verify Email";
                 btn.disabled = false;
 
-                updateProgress("Step 2 of 3: Enter Name", 66);
+                updateProgress("Step 2 of 3: Enter Credentials: Name", 66);
                 showStep('step-name');
             }, 1800);
         }
@@ -191,7 +191,7 @@
             if (!userName) return;
 
             document.getElementById('age-greeting').innerText = `OK, ${userName}, let's give you the right experience. How old are you?`;
-            updateProgress("Step 3 of 3: Confirm Age", 90);
+            updateProgress("Step 3 of 3: Enter Credentials: Age", 90);
             showStep('step-age');
         }
 
