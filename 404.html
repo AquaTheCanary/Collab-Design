@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Routing...</title>
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const repo = '/test.py';
+
+            // Auto-add trailing slash if accessing a folder route directly (e.g., /test.py/login)
+            if (!path.endsWith('/') && !path.split('/').pop().includes('.')) {
+                window.location.replace(path + '/' + window.location.search + window.location.hash);
+            } else {
+                // Default fallback if route is completely invalid
+                window.location.replace(repo + '/home/');
+            }
+        })();
+    </script>
+</head>
+<body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p>Loading...</p>
+</body>
+</html>
