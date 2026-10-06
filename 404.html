@@ -2,35 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Routing...</title>
+    <title>Loading...</title>
     <script>
         (function() {
-            const path = window.location.pathname;
-            const target = '/test.py/home/';
+            const repo = '/test.py';
+            let path = window.location.pathname;
 
-            // Prevent infinite loop if we are already trying to load /home/
-            if (path === target || path === '/test.py/home') {
+            // Strip repo prefix if present
+            if (path.startsWith(repo)) {
+                path = path.substring(repo.length);
+            }
+
+            // Split path into parts (e.g., "/home/" -> ["home"])
+            const parts = path.split('/').filter(p => p.length > 0);
+
+            // Infinite loop check: If the URL already ends with .html, stop routing
+            if (parts.length > 0 && parts[parts.length - 1].endsWith('.html')) {
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('msg').innerHTML = 
-                        '<span style="color: #f43f5e; font-weight: bold;">404 Page Not Found</span><br>' +
-                        '<span style="font-size: 14px; color: #94a3b8;">Make sure your file is located at <code>home/index.html</code> in your GitHub repository.</span>';
+                        '<h1 style="color: #f43f5e; font-size: 24px; margin-bottom: 8px;">404 - Page Not Found</h1>' +
+                        '<p style="color: #94a3b8; font-size: 14px;">The page <code>' + window.location.pathname + '</code> could not be found.</p>';
                 });
                 return;
             }
 
-            // If user typed /test.py/login, auto-add trailing slash to make it /test.py/login/
-            if (!path.endsWith('/') && !path.split('/').pop().includes('.')) {
-                window.location.replace(path + '/' + window.location.search + window.location.hash);
-            } else {
-                // Otherwise redirect to home
-                window.location.replace(target);
-            }
+            // Extract target folder name (default to "home" if visiting root)
+            const folder = parts[0] || 'home';
+
+            // Construct destination: /test.py/folder/folder.html
+            const target = `${repo}/${folder}/${folder}.html`;
+
+            // Instant redirect preserving query params and hashes
+            window.location.replace(target + window.location.search + window.location.hash);
         })();
     </script>
 </head>
 <body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
     <div id="msg">
-        <p>Routing to page...</p>
+        <p>Loading...</p>
     </div>
 </body>
 </html>
