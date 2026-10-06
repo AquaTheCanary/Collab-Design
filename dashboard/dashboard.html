@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Platform</title>
+    <title>Platform Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between font-sans">
@@ -16,75 +16,34 @@
                 Platform
             </a>
             <div class="flex items-center gap-4">
-                <a href="/test.py/dashboard.html" class="text-white font-semibold text-sm">Dashboard</a>
-                <a href="/test.py/settings.html" class="text-slate-400 hover:text-white font-medium text-sm transition">Settings</a>
-                <button onclick="logout()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium px-4 py-2 rounded-xl text-sm transition">Log Out</button>
+                <a href="/test.py/login.html" class="text-slate-300 hover:text-white font-medium text-sm transition">Log In</a>
+                <a href="/test.py/register.html" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition shadow-lg shadow-indigo-600/20">Get Started</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-6 py-10 flex-1 w-full space-y-8">
+    <!-- Hero Section -->
+    <main class="max-w-4xl mx-auto px-6 py-20 text-center flex-1 flex flex-col justify-center items-center">
+        <span class="px-3 py-1 bg-indigo-950 border border-indigo-800/60 text-indigo-400 text-xs font-semibold rounded-full uppercase tracking-wider mb-6">
+            Secure Account Verification
+        </span>
         
-        <!-- Welcome Banner -->
-        <div class="bg-gradient-to-r from-indigo-900/40 via-slate-800 to-slate-800 border border-slate-700/80 rounded-2xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-white mb-1">Welcome back!</h1>
-                <p class="text-slate-400 text-sm">Logged in as <span id="user-email-display" class="text-indigo-400 font-semibold">user@example.com</span></p>
-            </div>
-            <a href="/test.py/settings.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/20">
-                Manage Profile
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Seamless account setup with instant email security.
+        </h1>
+        
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+            Verify your email identity in seconds using our serverless magic link and passcode backend.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <a href="/test.py/register.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-lg font-semibold px-8 py-4 rounded-xl transition shadow-xl shadow-indigo-600/25 text-center">
+                Create Account
+            </a>
+            <a href="/test.py/login.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-lg font-semibold px-8 py-4 rounded-xl transition text-center">
+                Log In
             </a>
         </div>
-
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-slate-800 border border-slate-700/80 p-6 rounded-2xl space-y-2">
-                <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Account Status</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-2xl font-bold text-emerald-400">Verified</p>
-                    <span class="px-2.5 py-1 bg-emerald-950 border border-emerald-800/60 text-emerald-400 text-xs font-semibold rounded-full">Active</span>
-                </div>
-            </div>
-
-            <div class="bg-slate-800 border border-slate-700/80 p-6 rounded-2xl space-y-2">
-                <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Security</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-2xl font-bold text-white">Email OTP</p>
-                    <span class="px-2.5 py-1 bg-indigo-950 border border-indigo-800/60 text-indigo-400 text-xs font-semibold rounded-full">Protected</span>
-                </div>
-            </div>
-
-            <div class="bg-slate-800 border border-slate-700/80 p-6 rounded-2xl space-y-2">
-                <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Current Session</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-2xl font-bold text-white">GitHub Pages</p>
-                    <span class="px-2.5 py-1 bg-slate-700 text-slate-300 text-xs font-semibold rounded-full">Live</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Content Card -->
-        <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-8 space-y-4">
-            <h2 class="text-lg font-bold text-white">Quick Actions</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="/test.py/settings.html" class="p-4 bg-slate-900/60 hover:bg-slate-900 border border-slate-700 rounded-xl transition flex items-center justify-between group">
-                    <div>
-                        <p class="font-semibold text-white text-sm group-hover:text-indigo-400 transition">Account Settings</p>
-                        <p class="text-slate-400 text-xs">Update profile information and preferences</p>
-                    </div>
-                    <span class="text-slate-500 group-hover:text-indigo-400 transition">→</span>
-                </a>
-                <button onclick="logout()" class="p-4 bg-slate-900/60 hover:bg-slate-900 border border-slate-700 rounded-xl transition flex items-center justify-between text-left group">
-                    <div>
-                        <p class="font-semibold text-rose-400 text-sm">Sign Out</p>
-                        <p class="text-slate-400 text-xs">End your current session safely</p>
-                    </div>
-                    <span class="text-rose-400">→</span>
-                </button>
-            </div>
-        </div>
-
     </main>
 
     <!-- Footer -->
@@ -92,15 +51,5 @@
         &copy; Archie Sneddon. All rights reserved.
     </footer>
 
-    <script>
-        // Load user email from localStorage
-        const email = localStorage.getItem('userEmail') || 'user@example.com';
-        document.getElementById('user-email-display').textContent = email;
-
-        function logout() {
-            localStorage.removeItem('userEmail');
-            window.location.href = '/test.py/login.html';
-        }
-    </script>
 </body>
 </html>
