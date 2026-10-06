@@ -6,19 +6,31 @@
     <script>
         (function() {
             const path = window.location.pathname;
-            const repo = '/test.py';
+            const target = '/test.py/home/';
 
-            // Auto-add trailing slash if accessing a folder route directly (e.g., /test.py/login)
+            // Prevent infinite loop if we are already trying to load /home/
+            if (path === target || path === '/test.py/home') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('msg').innerHTML = 
+                        '<span style="color: #f43f5e; font-weight: bold;">404 Page Not Found</span><br>' +
+                        '<span style="font-size: 14px; color: #94a3b8;">Make sure your file is located at <code>home/index.html</code> in your GitHub repository.</span>';
+                });
+                return;
+            }
+
+            // If user typed /test.py/login, auto-add trailing slash to make it /test.py/login/
             if (!path.endsWith('/') && !path.split('/').pop().includes('.')) {
                 window.location.replace(path + '/' + window.location.search + window.location.hash);
             } else {
-                // Default fallback if route is completely invalid
-                window.location.replace(repo + '/home/');
+                // Otherwise redirect to home
+                window.location.replace(target);
             }
         })();
     </script>
 </head>
-<body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
-    <p>Loading...</p>
+<body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
+    <div id="msg">
+        <p>Routing to page...</p>
+    </div>
 </body>
 </html>
