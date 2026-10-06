@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+    // Global Routing and API Configuration
+    window.APP_CONFIG = {
+        BASE: '/test.py',
+        API_URL: 'https://testpy-emailbackend-aquathecanary-gamma.vercel.app/api/send'
+    };
+
+    // Helper function for clean page navigation from JS
+    function goTo(page) {
+        window.location.href = `${window.APP_CONFIG.BASE}/${page}/`;
+    }
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Platform</title>
