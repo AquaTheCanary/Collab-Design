@@ -7,20 +7,22 @@
 </head>
 <body style="overflow: hidden;">
   <div class="editor-toolbar">
-    <a href="/collab/home/home.html" class="logo">📐 Vectra</a>
+    <a href="/collab/home/" class="logo" style="margin-right: 1rem; font-size: 1.1rem;">
+      <span class="logo-badge">📐</span> Vectra
+    </a>
     <button class="tool-btn active" data-tool="select">👆 Select</button>
     <button class="tool-btn" data-tool="rect">🟦 Rectangle</button>
     <button class="tool-btn" data-tool="circle">⚪ Circle</button>
-    <input type="color" id="fillColor" value="#0d99ff" style="margin-left: auto;">
+    <input type="color" id="fillColor" value="#38bdf8" style="margin-left: auto; border: none; background: transparent; cursor: pointer; width: 32px; height: 32px;">
   </div>
 
   <div class="editor-layout">
     <aside class="editor-sidebar">
       <h4 style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Layers</h4>
-      <div style="margin-top: 1rem;">Canvas Active</div>
+      <div style="margin-top: 1rem; font-size: 0.9rem;">Canvas Active</div>
     </aside>
     <main class="canvas-area">
-      <canvas id="designCanvas" width="800" height="550"></canvas>
+      <canvas id="designCanvas" width="850" height="580"></canvas>
     </main>
   </div>
 
