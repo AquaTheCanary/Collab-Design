@@ -3,80 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pricing | Collab</title>
+  <title>Pricing & Feature Comparison | Collab</title>
+  <script src="/assets/js/app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --bg-black: #000; --panel-bg: #121212; --border: #262626; --brand-blue: #428be5; --brand-accent: #0f62fe; --text-muted: #888; }
+    :root { --bg: #000; --panel: #121212; --border: #262626; --brand: #0f62fe; --text-muted: #888; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background-color: var(--bg-black); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    body { background: var(--bg); color: #fff; min-height: 100vh; padding-bottom: 5rem; }
 
     nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
     .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
 
-    .pricing-header { text-align: center; margin: 4rem auto 2rem; max-width: 600px; padding: 0 1rem; }
-    .pricing-grid { max-width: 1100px; margin: 0 auto 5rem; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 0 1.5rem; }
+    .header { text-align: center; margin: 4rem auto 2rem; max-width: 600px; }
+    .pricing-table-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+    th, td { padding: 1.2rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #181818; font-size: 1rem; }
     
-    .plan-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; }
-    .plan-card.featured { border-color: var(--brand-blue); position: relative; }
-    .badge { position: absolute; top: -12px; right: 20px; background: var(--brand-accent); color: #fff; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
-    
-    .price { font-size: 2.5rem; font-weight: 800; margin: 1rem 0; }
-    .features { list-style: none; margin: 1.5rem 0; flex: 1; }
-    .features li { padding: 0.4rem 0; color: var(--text-muted); font-size: 0.9rem; }
-    
-    .btn-plan { display: block; text-align: center; padding: 0.8rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-    .btn-primary { background: #fff; color: #000; }
-    .btn-secondary { background: #1a1a1a; color: #fff; border: 1px solid var(--border); }
+    .feature-name { font-weight: 600; font-size: 0.95rem; }
+    .check { color: #24a148; font-weight: 700; }
+    .cross { color: #525252; }
+
+    .btn-plan { display: inline-block; padding: 0.6rem 1.2rem; background: #fff; color: #000; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <nav>
-    <a href="/home/index.html" class="brand-container">
-      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
+    <a href="#" id="homeBrand" class="brand-container">
+      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
       <span>Collab</span>
     </a>
-    <a href="/auth/personal/login/index.html" class="btn-plan btn-secondary" style="padding: 0.5rem 1rem;">Sign In</a>
   </nav>
 
-  <div class="pricing-header">
-    <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Explore Plans</h1>
-    <p style="color: var(--text-muted);">Pick the tier that fits your workflow, from individual creators to enterprise teams.</p>
+  <div class="header">
+    <h1 style="font-size: 2.5rem; font-weight: 800;">Plans & Feature Matrix</h1>
+    <p style="color: var(--text-muted); margin-top: 0.5rem;">Compare capabilities across personal and enterprise workspaces.</p>
   </div>
 
-  <div class="pricing-grid">
-    <div class="plan-card">
-      <h3 style="font-size: 1.2rem;">Free Starter</h3>
-      <div class="price">$0</div>
-      <ul class="features">
-        <li>✓ 3 active canvas files</li>
-        <li>✓ Unlimited view-only collaborators</li>
-        <li>✓ Standard vector tools</li>
-      </ul>
-      <a href="/auth/personal/register/index.html" class="btn-plan btn-secondary">Get Started</a>
-    </div>
-
-    <div class="plan-card featured">
-      <div class="badge">POPULAR</div>
-      <h3 style="font-size: 1.2rem;">Collab Professional</h3>
-      <div class="price">$12 <span style="font-size:1rem; color:var(--text-muted);">/ mo</span></div>
-      <ul class="features">
-        <li>✓ Unlimited canvas files</li>
-        <li>✓ Real-time multiplayer editing</li>
-        <li>✓ Version history & export tools</li>
-      </ul>
-      <a href="/auth/personal/register/index.html" class="btn-plan btn-primary">Try Professional</a>
-    </div>
-
-    <div class="plan-card">
-      <h3 style="font-size: 1.2rem;">Organisation</h3>
-      <div class="price">$45 <span style="font-size:1rem; color:var(--text-muted);">/ seat</span></div>
-      <ul class="features">
-        <li>✓ Org-wide design systems</li>
-        <li>✓ Advanced security & SSO</li>
-        <li>✓ Dedicated support</li>
-      </ul>
-      <a href="/auth/organisation/register/index.html" class="btn-plan btn-secondary">Create Org Account</a>
-    </div>
+  <div class="pricing-table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Features</th>
+          <th>Free Starter<br><span style="font-size:0.8rem; color:var(--text-muted);">$0 / forever</span></th>
+          <th>Pro Personal<br><span style="font-size:0.8rem; color:var(--text-muted);">$12 / month</span></th>
+          <th>Organisation<br><span style="font-size:0.8rem; color:var(--text-muted);">$45 / seat</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="feature-name">Active Canvas Files</td>
+          <td>3 Files</td>
+          <td>Unlimited</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr>
+          <td class="feature-name">Interactive Vector Engine</td>
+          <td class="check">✓ Basic</td>
+          <td class="check">✓ Advanced</td>
+          <td class="check">✓ Advanced</td>
+        </tr>
+        <tr>
+          <td class="feature-name">Undo / Redo Stack History</td>
+          <td>10 Steps</td>
+          <td>Unlimited</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr>
+          <td class="feature-name">Shared Team Workspace Hub</td>
+          <td class="cross">✕</td>
+          <td class="cross">✕</td>
+          <td class="check">✓ Included</td>
+        </tr>
+        <tr>
+          <td class="feature-name">SAML Single Sign-On (SSO)</td>
+          <td class="cross">✕</td>
+          <td class="cross">✕</td>
+          <td class="check">✓ Included</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><a href="#" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Sign Up Free</a></td>
+          <td><a href="#" class="btnRegPro btn-plan">Get Pro</a></td>
+          <td><a href="#" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Deploy Org</a></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
+  <script>
+    document.getElementById('homeBrand').href = App.url('/home/index.html');
+    document.querySelector('.btnRegFree').href = App.url('/auth/personal/register/index.html');
+    document.querySelector('.btnRegPro').href = App.url('/auth/personal/register/index.html');
+    document.querySelector('.btnRegOrg').href = App.url('/auth/organisation/register/index.html');
+  </script>
 </body>
 </html>
