@@ -2,24 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Personal Sign Up | Vectra</title>
-  <link rel="stylesheet" href="/collab/static/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create a free Personal Collab account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg-black: #000; --panel-bg: #121212; --border: #262626; --brand-blue: #428be5; --brand-accent: #0f62fe; --text-muted: #888; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; }
+    .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
+
+    .auth-wrapper { max-width: 400px; width: 100%; margin: 4rem auto; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
+    .form-group input { width: 100%; padding: 0.75rem 0.9rem; background: #000; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.95rem; }
+    .form-group input:focus { outline: none; border-color: var(--brand-blue); }
+    
+    .btn-submit { width: 100%; padding: 0.8rem; background: var(--text-white); color: #000; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 0.5rem; }
+    .btn-submit:hover { background: #e0e0e0; }
+  </style>
 </head>
 <body>
   <nav>
-    <a href="/collab/home/" class="logo"><span class="logo-badge">📐</span> Vectra</a>
+    <a href="./index.html" class="brand-container">
+      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
+      <span>Collab</span>
+    </a>
   </nav>
 
-  <main class="container">
-    <div class="card">
-      <h2>Create Personal Account</h2>
-      <form action="/collab/dashboard/" method="GET" style="margin-top: 1.5rem;">
-        <div class="form-group"><label>Full Name</label><input type="text" required placeholder="Jane Doe"></div>
-        <div class="form-group"><label>Email</label><input type="email" required placeholder="jane@domain.com"></div>
-        <div class="form-group"><label>Password</label><input type="password" required placeholder="••••••••"></div>
-        <button type="submit" class="btn" style="width: 100%;">Register</button>
-      </form>
-    </div>
-  </main>
+  <div class="auth-wrapper">
+    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.3rem;">Create your account</h2>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Join Collab to create and share vector graphics.</p>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label>Username (Custom profile handle)</label>
+        <input type="text" id="username" required placeholder="e.g. awesomearchie124">
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fullname" required placeholder="Archie Harrison">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('registerForm').onsubmit = (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim().replaceAll(' ', '').toLowerCase();
+      const name = document.getElementById('fullname').value.trim();
+
+      const users = JSON.parse(localStorage.getItem('collab_users') || '{}');
+      if (users[username]) { alert('Username is already taken!'); return; }
+
+      users[username] = { username, name, bio: 'Interface designer on Collab.', projects: [] };
+      localStorage.setItem('collab_users', JSON.stringify(users));
+      localStorage.setItem('collab_session', username);
+
+      window.location.href = `./profile.html?user=${username}`;
+    };
+  </script>
 </body>
 </html>
