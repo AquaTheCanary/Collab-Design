@@ -2,30 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Settings | Vectra</title>
-  <link rel="stylesheet" href="/collab/static/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Collab</title>
+  
+  <script>
+    if (!localStorage.getItem('collab_session')) {
+      window.location.href = '/auth/personal/login/index.html';
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0c0d0e; --panel: #16171a; --border: #26272b; --brand-blue: #0f62fe; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: var(--bg); color: #fff; min-height: 100vh; display: flex; }
+
+    sidebar { width: 220px; background: var(--panel); border-right: 1px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    sidebar a { padding: 0.6rem 0.8rem; color: #a0a0a0; text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: 6px; }
+    sidebar a.active, sidebar a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+    main { flex: 1; padding: 2.5rem; max-width: 600px; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: #888; margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; padding: 0.7rem; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; color: #fff; }
+    
+    .btn-save { padding: 0.7rem 1.2rem; background: var(--brand-blue); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+  </style>
 </head>
 <body>
-  <nav>
-    <a href="/collab/home/" class="logo"><span class="logo-badge">📐</span> Vectra</a>
-    <ul class="nav-links">
-      <li><a href="/collab/dashboard/">Back to Dashboard</a></li>
-    </ul>
-  </nav>
+  <sidebar>
+    <div style="font-weight: 800; font-size: 1.2rem; margin-bottom: 1.5rem; color: #fff;">Collab</div>
+    <a href="/dashboard/index.html">❖ Recents</a>
+    <a href="/dashboard/settings/index.html" class="active">⚙ Settings</a>
+    <a href="#" onclick="localStorage.removeItem('collab_session'); location.href='/home/index.html';">🚪 Sign Out</a>
+  </sidebar>
 
-  <main class="container">
-    <div class="card" style="max-width: 600px;">
-      <h2>Account Settings</h2>
-      <div class="form-group" style="margin-top: 1.5rem;">
-        <label>Display Name</label>
-        <input type="text" value="AquaTheCanary">
+  <main>
+    <h1 style="font-size: 1.8rem; margin-bottom: 1.5rem;">Account Preferences</h1>
+    
+    <form id="settingsForm">
+      <div class="form-group">
+        <label>Active Handle</label>
+        <input type="text" id="userHandle" readonly>
       </div>
       <div class="form-group">
-        <label>Theme Preference</label>
-        <select><option>Dark Mode</option><option>Light Mode</option></select>
+        <label>Display Name</label>
+        <input type="text" id="displayName" placeholder="Enter your full name">
       </div>
-      <button class="btn">Save Changes</button>
-    </div>
+      <button type="submit" class="btn-save">Save Settings</button>
+    </form>
   </main>
+
+  <script>
+    const session = localStorage.getItem('collab_session');
+    document.getElementById('userHandle').value = session;
+
+    document.getElementById('settingsForm').onsubmit = (e) => {
+      e.preventDefault();
+      alert('Settings updated successfully.');
+    };
+  </script>
 </body>
 </html>
