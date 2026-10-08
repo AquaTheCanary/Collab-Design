@@ -3,66 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log in to Collab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Login | Collab</title>
+  <script src="/assets/js/app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg-black: #000; --panel-bg: #121212; --border: #262626; --brand-blue: #428be5; --text-muted: #888; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background-color: var(--bg-black); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
-    
-    nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; }
-    .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
-
-    .auth-wrapper { max-width: 400px; width: 100%; margin: 4rem auto; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
-    .form-group input { width: 100%; padding: 0.75rem 0.9rem; background: #000; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.95rem; }
-    
-    .btn-submit { width: 100%; padding: 0.8rem; background: #fff; color: #000; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 0.5rem; }
+    body { background: #000; color: #fff; min-height: 100vh; display: grid; place-items: center; font-family: 'Inter', sans-serif; }
+    .card { width: 100%; max-width: 380px; padding: 2rem; background: #111; border: 1px solid #222; border-radius: 12px; }
+    input { width: 100%; padding: 0.75rem; margin: 0.5rem 0 1rem; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; }
+    button { width: 100%; padding: 0.75rem; background: #0f62fe; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="/home/index.html" class="brand-container">
-      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
-      <span>Collab</span>
-    </a>
-  </nav>
-
-  <div class="auth-wrapper">
-    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.3rem;">Welcome back</h2>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Sign in to access your Collab workspace.</p>
-
+  <div class="card">
+    <h2 style="margin-bottom: 1rem;">Welcome back</h2>
     <form id="loginForm">
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" id="username" required placeholder="awesomearchie124">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" required placeholder="••••••••">
-      </div>
-      <button type="submit" class="btn-submit">Sign In to Editor</button>
+      <label style="font-size: 0.85rem; color: #888;">Username</label>
+      <input type="text" id="username" required placeholder="Enter handle">
+      <button type="submit">Log In</button>
     </form>
   </div>
 
   <script>
-    document.getElementById('loginForm').onsubmit = (e) => {
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const username = document.getElementById('username').value.trim().toLowerCase();
-
-      // Demo auto-register if user doesn't exist
-      const users = JSON.parse(localStorage.getItem('collab_users') || '{}');
-      if (!users[username]) {
-        users[username] = { username, name: username, bio: 'Collab Creator', projects: [] };
-        localStorage.setItem('collab_users', JSON.stringify(users));
+      const user = document.getElementById('username').value.trim();
+      if (user) {
+        App.setSession(user);
+        // Automatically redirects to the editor relative to your new custom domain root
+        window.location.href = App.url('/editor/index.html');
       }
-
-      localStorage.setItem('collab_session', username);
-      
-      // Fixed absolute root link to editor
-      window.location.href = '/editor/index.html';
-    };
+    });
   </script>
 </body>
 </html>
