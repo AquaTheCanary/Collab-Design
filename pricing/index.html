@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pricing & Feature Comparison | Collab</title>
+  <title>Plans and Pricing| Collab</title>
   <script src="/assets/js/app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -17,8 +17,8 @@
     .header { text-align: center; margin: 4rem auto 2rem; max-width: 600px; }
     .pricing-table-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; overflow-x: auto; }
 
-    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
-    th, td { padding: 1.2rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 0px solid var(--border); border-radius: 25px; }
+    th, td { padding: 1.2rem 1.5rem; text-align: left; border-bottom: 0px solid var(--border); }
     th { background: #181818; font-size: 1rem; }
     
     .feature-name { font-weight: 600; font-size: 0.95rem; }
@@ -37,8 +37,8 @@
   </nav>
 
   <div class="header">
-    <h1 style="font-size: 2.5rem; font-weight: 800;">Plans & Feature Matrix</h1>
-    <p style="color: var(--text-muted); margin-top: 0.5rem;">Compare capabilities across personal and enterprise workspaces.</p>
+    <h1 style="font-size: 2.5rem; font-weight: 800;">Plans & Pricing</h1>
+    <p style="color: var(--text-muted); margin-top: 0.5rem;">Expand your workflow with a paid plan.<"\n"You can also stick to the free plan, with limited features<"</p>
   </div>
 
   <div class="pricing-table-wrapper">
@@ -46,47 +46,53 @@
       <thead>
         <tr>
           <th>Features</th>
-          <th>Free Starter<br><span style="font-size:0.8rem; color:var(--text-muted);">$0 / forever</span></th>
-          <th>Pro Personal<br><span style="font-size:0.8rem; color:var(--text-muted);">$12 / month</span></th>
-          <th>Organisation<br><span style="font-size:0.8rem; color:var(--text-muted);">$45 / seat</span></th>
+          <th>Free<br><span style="font-size:0.8rem; color:var(--text-muted);">-</span></th>
+          <th>Team<br><span style="font-size:0.8rem; color:var(--text-muted);">$25/seat/ month</span></th>
+          <th>Organisation<br><span style="font-size:0.8rem; color:var(--text-muted);">$50/seat/month</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="feature-name">Active Canvas Files</td>
+          <td class="feature-name">Number of Drafts</td>
+          <td>25 drafts</td>
+          <td>100 drafts per person</td>
+          <td>Unlimited drafts</td>
+        </tr>
+        <tr>
+          <td class="feature-name">Number of Files</td>
           <td>3 Files</td>
-          <td>Unlimited</td>
-          <td>Unlimited</td>
+          <td>25 Files</td>
+          <td>Unlimited Files</td>
         </tr>
         <tr>
-          <td class="feature-name">Interactive Vector Engine</td>
-          <td class="check">✓ Basic</td>
-          <td class="check">✓ Advanced</td>
-          <td class="check">✓ Advanced</td>
+          <td class="feature-name">Canvas</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
         </tr>
         <tr>
-          <td class="feature-name">Undo / Redo Stack History</td>
+          <td class="feature-name">Undo/Redo Stack History</td>
           <td>10 Steps</td>
           <td>Unlimited</td>
           <td>Unlimited</td>
         </tr>
         <tr>
-          <td class="feature-name">Shared Team Workspace Hub</td>
-          <td class="cross">✕</td>
-          <td class="cross">✕</td>
-          <td class="check">✓ Included</td>
+          <td class="feature-name">Customer Support</td>
+          <td class="cross">Basic</td>
+          <td class="cross">Basic</td>
+          <td class="check">Priority</td>
         </tr>
         <tr>
           <td class="feature-name">SAML Single Sign-On (SSO)</td>
           <td class="cross">✕</td>
           <td class="cross">✕</td>
-          <td class="check">✓ Included</td>
+          <td class="check">✓</td>
         </tr>
         <tr>
           <td></td>
-          <td><a href="#" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Sign Up Free</a></td>
-          <td><a href="#" class="btnRegPro btn-plan">Get Pro</a></td>
-          <td><a href="#" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Deploy Org</a></td>
+          <td><a href="#" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Choose Free Plan</a></td>
+          <td><a href="#" class="btnRegPro btn-plan">Choose Team Plan</a></td>
+          <td><a href="#" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Contact Sales</a></td>
         </tr>
       </tbody>
     </table>
@@ -94,9 +100,9 @@
 
   <script>
     document.getElementById('homeBrand').href = App.url('/home/index.html');
-    document.querySelector('.btnRegFree').href = App.url('/auth/personal/register/index.html');
-    document.querySelector('.btnRegPro').href = App.url('/auth/personal/register/index.html');
-    document.querySelector('.btnRegOrg').href = App.url('/auth/organisation/register/index.html');
+    document.querySelector('.btnRegFree').href = App.url('/auth/personal/register/');
+    document.querySelector('.btnRegPro').href = App.url('/auth/personal/register/');
+    document.querySelector('.btnRegOrg').href = App.url('/contact/');
   </script>
 </body>
 </html>
