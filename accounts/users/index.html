@@ -3,337 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vectra Platform</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <title>User Profile | Collab Community</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-dark: #090d16;
-      --bg-panel: #111827;
-      --bg-card: #1f2937;
-      --bg-input: #0f172a;
-      --border: #1e293b;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent: #38bdf8;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --radius: 12px;
-      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    }
+    :root { --bg-black: #000; --panel-bg: #141414; --border: #262626; --brand-blue: #428be5; --text-muted: #888; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
+    .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    .profile-banner { height: 180px; background: linear-gradient(135deg, #0f62fe, #428be5); border-bottom: 1px solid var(--border); }
+    .profile-container { max-width: 1000px; margin: 0 auto; width: 100%; padding: 0 2rem; position: relative; }
+    .avatar { width: 110px; height: 110px; border-radius: 50%; background: #222; border: 4px solid var(--bg-black); margin-top: -55px; display: grid; place-items: center; font-size: 2.8rem; font-weight: 800; }
 
-    /* Navigation */
-    nav {
-      height: 64px;
-      background: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+    .profile-meta { margin-top: 1rem; display: flex; justify-content: space-between; align-items: flex-start; }
+    .profile-meta h1 { font-size: 1.8rem; font-weight: 800; }
+    .profile-meta .handle { color: var(--brand-blue); font-weight: 600; font-size: 0.95rem; margin-top: 0.2rem; }
 
-    .brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; font-size: 1.25rem; text-decoration: none; color: #fff; cursor: pointer; }
-    .brand-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: grid; place-items: center; }
+    .btn-share { padding: 0.6rem 1.2rem; background: var(--panel-bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-weight: 600; cursor: pointer; }
 
-    .nav-links { display: flex; gap: 1rem; align-items: center; }
-    .btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: #fff; padding: 0.55rem 1.2rem; border-radius: 8px; border: none; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; text-decoration: none;
-    }
-    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-secondary { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); }
-
-    /* App Views */
-    .view-container { flex: 1; display: none; padding: 2rem; }
-    .view-container.active { display: block; }
-
-    /* Forms & Auth Cards */
-    .auth-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; max-width: 420px; margin: 3rem auto; box-shadow: var(--shadow); }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; margin-bottom: 0.45rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-    .form-group input { width: 100%; padding: 0.75rem 1rem; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.95rem; }
-    .form-group input:focus { outline: none; border-color: var(--primary); }
-
-    /* Profile UI Layout */
-    .profile-header {
-      background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; max-width: 900px; margin: 0 auto 2rem; display: flex; gap: 2rem; align-items: center;
-    }
-    .profile-avatar { width: 90px; height: 90px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: grid; place-items: center; font-size: 2.2rem; font-weight: 800; }
-    .profile-info h1 { font-size: 1.8rem; font-weight: 800; }
-    .profile-info .handle { color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
-    .profile-info .bio { color: var(--text-muted); font-size: 0.95rem; }
-
-    /* Project Cards Grid */
-    .projects-grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-    .project-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
-    .project-preview { height: 140px; background: var(--bg-input); border-radius: 8px; border: 1px solid var(--border); display: grid; place-items: center; margin-bottom: 1rem; color: var(--text-muted); }
-
-    /* Notification Badge */
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--primary); color: #fff; padding: 0.8rem 1.4rem; border-radius: 8px; font-weight: 600; box-shadow: var(--shadow); display: none; z-index: 200; }
+    .projects-grid { max-width: 1000px; margin: 3rem auto; width: 100%; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .project-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .project-preview { height: 160px; background: #080808; display: grid; place-items: center; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+    .project-details { padding: 1rem; }
   </style>
 </head>
 <body>
-
-  <!-- Navigation Bar -->
   <nav>
-    <div class="brand" onclick="navigate('/')">
-      <div class="brand-icon">📐</div>
-      Vectra
-    </div>
-
-    <div class="nav-links" id="nav-actions">
-      <!-- Dynamic Buttons via JS -->
-    </div>
+    <a href="./index.html" class="brand-container">
+      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
+      <span>Collab</span>
+    </a>
+    <a href="./editor.html" class="btn-share" style="text-decoration:none;">Open Editor</a>
   </nav>
 
-  <!-- Notification Toast -->
-  <div id="toast" class="toast">Account Created Successfully!</div>
+  <div class="profile-banner"></div>
 
-  <!-- 🏠 VIEW: Home Landing -->
-  <section id="view-home" class="view-container active">
-    <div style="text-align: center; max-width: 700px; margin: 4rem auto 0;">
-      <h1 style="font-size: 3.2rem; font-weight: 800; letter-spacing: -0.03em;">Create & Share Vector Designs</h1>
-      <p style="color: var(--text-muted); font-size: 1.1rem; margin: 1.2rem 0 2rem;">Claim your custom profile URL and share your design portfolio with the world.</p>
-      <button class="btn" style="padding: 0.85rem 2rem; font-size: 1rem;" onclick="navigate('/register')">Get Started Free</button>
-    </div>
-  </section>
+  <div class="profile-container">
+    <div id="profileHeader"></div>
+  </div>
 
-  <!-- 📝 VIEW: Register Account -->
-  <section id="view-register" class="view-container">
-    <div class="auth-card">
-      <h2>Create Account</h2>
-      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Pick a custom handle for your profile URL.</p>
-      <form onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="reg-username" required placeholder="e.g. awesomearchie124">
-        </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="reg-name" required placeholder="Archie Harrison">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="reg-password" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn" style="width: 100%;">Create Account & Profile</button>
-      </form>
-    </div>
-  </section>
+  <div class="projects-grid" id="projectsGrid"></div>
 
-  <!-- 🔑 VIEW: Login -->
-  <section id="view-login" class="view-container">
-    <div class="auth-card">
-      <h2>Welcome Back</h2>
-      <form onsubmit="handleLogin(event)" style="margin-top: 1.5rem;">
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="login-username" required placeholder="awesomearchie124">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="login-password" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn" style="width: 100%;">Sign In</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- 👤 VIEW: Dynamic User Profile (@username) -->
-  <section id="view-profile" class="view-container">
-    <div class="profile-header">
-      <div class="profile-avatar" id="prof-avatar">A</div>
-      <div class="profile-info">
-        <h1 id="prof-name">Archie Harrison</h1>
-        <div class="handle" id="prof-handle">@awesomearchie124</div>
-        <div class="bio" id="prof-bio">Vector designer and canvas enthusiast.</div>
-      </div>
-      <button class="btn btn-secondary" style="margin-left: auto;" onclick="copyProfileLink()">Share Profile</button>
-    </div>
-
-    <div class="projects-grid" id="prof-projects">
-      <!-- Projects injected dynamically -->
-    </div>
-  </section>
-
-  <!-- Application Logic & Routing -->
   <script>
-    // Local Database Simulation
-    const DB = {
-      getUsers: () => JSON.parse(localStorage.getItem('vectra_users') || '{}'),
-      saveUser: (user) => {
-        const users = DB.getUsers();
-        users[user.username.toLowerCase()] = user;
-        localStorage.setItem('vectra_users', JSON.stringify(users));
-      },
-      getSession: () => localStorage.getItem('vectra_session'),
-      setSession: (username) => localStorage.setItem('vectra_session', username),
-      clearSession: () => localStorage.removeItem('vectra_session')
-    };
+    const params = new URLSearchParams(window.location.search);
+    const username = (params.get('user') || 'awesomearchie124').toLowerCase();
 
-    // Initialize Default User Profile
-    if (!DB.getUsers()['awesomearchie124']) {
-      DB.saveUser({
+    // Default Account Setup
+    const users = JSON.parse(localStorage.getItem('collab_users') || '{}');
+    if (!users['awesomearchie124']) {
+      users['awesomearchie124'] = {
         username: 'awesomearchie124',
         name: 'Archie Harrison',
-        bio: 'Creator of Vectra workspace designs.',
-        projects: [
-          { title: 'Abstract Vector Logo', date: 'Oct 2026' },
-          { title: 'UI Canvas Framework', date: 'Sep 2026' }
-        ]
-      });
-    }
-
-    // Router Function
-    function navigate(path) {
-      window.history.pushState({}, '', `/collab${path}`);
-      renderRoute();
-    }
-
-    function renderRoute() {
-      const path = window.location.pathname.replace('/collab', '').replace(/\/$/, '') || '/';
-      document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-
-      updateNav();
-
-      // Check for Profile Handle Route: /@username
-      if (path.startsWith('/@')) {
-        const username = path.replace('/@', '').toLowerCase();
-        renderProfile(username);
-        return;
-      }
-
-      switch (path) {
-        case '/':
-          document.getElementById('view-home').classList.add('active');
-          break;
-        case '/register':
-          document.getElementById('view-register').classList.add('active');
-          break;
-        case '/login':
-          document.getElementById('view-login').classList.add('active');
-          break;
-        default:
-          document.getElementById('view-home').classList.add('active');
-      }
-    }
-
-    // Update Navigation UI based on session
-    function updateNav() {
-      const currentUser = DB.getSession();
-      const navActions = document.getElementById('nav-actions');
-
-      if (currentUser) {
-        navActions.innerHTML = `
-          <button class="btn btn-secondary" onclick="navigate('/@${currentUser}')">My Profile (@${currentUser})</button>
-          <button class="btn" onclick="logout()">Sign Out</button>
-        `;
-      } else {
-        navActions.innerHTML = `
-          <button class="btn btn-secondary" onclick="navigate('/login')">Sign In</button>
-          <button class="btn" onclick="navigate('/register')">Get Started</button>
-        `;
-      }
-    }
-
-    // Authentication Handlers
-    function handleRegister(e) {
-      e.preventDefault();
-      const username = document.getElementById('reg-username').value.trim().replaceAll(' ', '').toLowerCase();
-      const name = document.getElementById('reg-name').value.trim();
-
-      const existingUsers = DB.getUsers();
-      if (existingUsers[username]) {
-        alert('Username is already taken!');
-        return;
-      }
-
-      const newUser = {
-        username: username,
-        name: name,
-        bio: 'New Vectra creator.',
-        projects: [{ title: 'My First Canvas', date: 'Just now' }]
+        bio: 'Interface designer creating vector assets on Collab.',
+        projects: [{ title: 'Design System Icons', date: 'Oct 2026' }]
       };
-
-      DB.saveUser(newUser);
-      DB.setSession(username);
-      showToast('Account Created!');
-      navigate(`/@${username}`);
+      localStorage.setItem('collab_users', JSON.stringify(users));
     }
 
-    function handleLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById('login-username').value.trim().toLowerCase();
-      const users = DB.getUsers();
+    const user = users[username];
+    const headerEl = document.getElementById('profileHeader');
+    const gridEl = document.getElementById('projectsGrid');
 
-      if (!users[username]) {
-        alert('User not found!');
-        return;
-      }
-
-      DB.setSession(username);
-      showToast('Logged In!');
-      navigate(`/@${username}`);
-    }
-
-    function logout() {
-      DB.clearSession();
-      navigate('/');
-    }
-
-    // Render Dynamic Profile View
-    function renderProfile(username) {
-      const user = DB.getUsers()[username];
-      const profileView = document.getElementById('view-profile');
-
-      if (!user) {
-        profileView.innerHTML = `<div style="text-align:center; margin-top:4rem;"><h2>User @${username} Not Found</h2><button class="btn" onclick="navigate('/')" style="margin-top:1rem;">Back Home</button></div>`;
-        profileView.classList.add('active');
-        return;
-      }
-
-      document.getElementById('prof-avatar').innerText = user.name.charAt(0).toUpperCase();
-      document.getElementById('prof-name').innerText = user.name;
-      document.getElementById('prof-handle').innerText = `@${user.username}`;
-      document.getElementById('prof-bio').innerText = user.bio || 'Vectra platform creator.';
-
-      const projectsGrid = document.getElementById('prof-projects');
-      projectsGrid.innerHTML = user.projects.map(p => `
-        <div class="project-card">
-          <div class="project-preview">📐 Canvas Art</div>
-          <h4 style="font-size:1rem;">${p.title}</h4>
-          <p style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Saved ${p.date}</p>
+    if (!user) {
+      headerEl.innerHTML = `<h2 style="margin-top:2rem;">User @${username} Not Found</h2>`;
+    } else {
+      headerEl.innerHTML = `
+        <div class="avatar">${user.name.charAt(0).toUpperCase()}</div>
+        <div class="profile-meta">
+          <div>
+            <h1>${user.name}</h1>
+            <div class="handle">@${user.username}</div>
+            <p style="color:var(--text-muted); margin-top:0.5rem;">${user.bio}</p>
+          </div>
+          <button class="btn-share" onclick="navigator.clipboard.writeText(location.href); alert('Copied profile URL!');">Copy Profile Link</button>
         </div>
-      `).join('');
+      `;
 
-      profileView.classList.add('active');
+      if (!user.projects || user.projects.length === 0) {
+        gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No published designs yet.</div>`;
+      } else {
+        gridEl.innerHTML = user.projects.map(p => `
+          <div class="project-card">
+            <div class="project-preview">❖ Vector Project</div>
+            <div class="project-details">
+              <h4 style="font-size:1rem; font-weight:600;">${p.title}</h4>
+              <p style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Saved ${p.date}</p>
+            </div>
+          </div>
+        `).join('');
+      }
     }
-
-    function copyProfileLink() {
-      navigator.clipboard.writeText(window.location.href);
-      showToast('Profile URL copied to clipboard!');
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    }
-
-    // Handle browser back/forward buttons & initial load
-    window.onpopstate = renderRoute;
-    document.addEventListener('DOMContentLoaded', renderRoute);
   </script>
 </body>
 </html>
