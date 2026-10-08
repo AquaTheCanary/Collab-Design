@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editor | Collab</title>
+  <title>Vector Studio | Collab Editor</title>
 
   <script src="/assets/js/app.js"></script>
   <script>App.requireAuth();</script>
@@ -19,7 +19,7 @@
       --text-muted: #a8a8a8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg-dark); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    body { background: var(--bg-dark); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; user-select: none; }
 
     header {
       height: 52px; background: var(--panel-bg); border-bottom: 1px solid var(--border);
@@ -27,19 +27,27 @@
     }
     .brand-link { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #fff; font-weight: 700; }
     
-    .toolbar { display: flex; gap: 0.5rem; background: #141414; padding: 0.25rem 0.5rem; border-radius: 8px; border: 1px solid var(--border); }
+    .toolbar { display: flex; gap: 0.4rem; background: #141414; padding: 0.25rem 0.5rem; border-radius: 8px; border: 1px solid var(--border); align-items: center; }
     .tool-btn {
-      padding: 0.4rem 0.8rem; background: transparent; border: none; color: var(--text-muted);
+      padding: 0.4rem 0.75rem; background: transparent; border: none; color: var(--text-muted);
       border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease;
     }
     .tool-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
     .tool-btn.active { background: var(--brand); color: #fff; }
 
     .editor-layout { flex: 1; display: flex; overflow: hidden; }
-    aside { width: 240px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; }
-    
-    .viewport { flex: 1; background: #080808; display: grid; place-items: center; position: relative; }
-    canvas { background: #181818; box-shadow: 0 20px 60px rgba(0,0,0,0.6); border-radius: 8px; }
+    aside { width: 250px; background: var(--panel-bg); border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; }
+    .properties-bar { width: 260px; background: var(--panel-bg); border-left: 1px solid var(--border); padding: 1rem; }
+
+    .viewport { flex: 1; background: #080808; display: grid; place-items: center; position: relative; overflow: auto; }
+    canvas { background: #181818; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 4px; cursor: crosshair; }
+
+    .layer-item { padding: 0.5rem 0.75rem; background: #141414; border: 1px solid transparent; border-radius: 6px; margin-bottom: 0.4rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .layer-item.selected { border-color: var(--brand); background: rgba(15,98,254,0.15); }
+
+    .prop-row { margin-bottom: 1rem; }
+    .prop-row label { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .prop-row input { width: 100%; padding: 0.5rem; background: #141414; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem; }
 
     .btn-primary { padding: 0.75rem; background: var(--brand); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .btn-primary:hover { background: var(--brand-hover); }
@@ -50,115 +58,272 @@
   <header>
     <a href="#" id="homeLink" class="brand-link">
       <svg width="24" height="24" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
-      <span>Vector Studio</span>
+      <span>Interactive Editor</span>
     </a>
 
     <div class="toolbar">
-      <button class="tool-btn active" data-tool="rect">Rect</button>
-      <button class="tool-btn" data-tool="circle">Circle</button>
-      <input type="color" id="colorPicker" value="#0f62fe" style="border:none; background:none; width:28px; height:28px; cursor:pointer;">
+      <button class="tool-btn active" data-tool="select">✋ Select / Move</button>
+      <button class="tool-btn" data-tool="rect">🟦 Rect</button>
+      <button class="tool-btn" data-tool="circle">⚪ Circle</button>
+      <button class="tool-btn" data-tool="text">💬 Text</button>
+      <div style="width: 1px; height: 18px; background: var(--border); margin: 0 0.3rem;"></div>
+      <button class="tool-btn" id="undoBtn">↩ Undo</button>
+      <button class="tool-btn" id="redoBtn">↪ Redo</button>
     </div>
 
     <div id="userBadge" style="font-size:0.85rem; font-weight:600;"></div>
   </header>
 
   <div class="editor-layout">
+    <!-- Layers Panel -->
     <aside>
-      <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:1rem;">Layers</div>
-      <ul id="layersContainer" style="list-style:none; flex:1; overflow-y:auto;"></ul>
-      <button class="btn-primary" id="saveBtn">Save Project</button>
+      <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:1rem;">Layers Stack</div>
+      <div id="layersContainer" style="flex:1; overflow-y:auto;"></div>
+      <button class="btn-primary" id="saveBtn">Save & Return to Dashboard</button>
     </aside>
 
+    <!-- Canvas Stage -->
     <main class="viewport">
       <canvas id="stage" width="900" height="600"></canvas>
     </main>
+
+    <!-- Inspector Panel -->
+    <aside class="properties-bar">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:1rem;">Element Inspector</div>
+      <div id="inspectorContent">
+        <p style="font-size:0.85rem; color:var(--text-muted);">Select a shape on canvas or layer list to modify its parameters.</p>
+      </div>
+    </aside>
   </div>
 
   <script type="module">
     document.getElementById('homeLink').href = App.url('/home/index.html');
     document.getElementById('userBadge').textContent = `@${App.getSession()}`;
 
-    // Canvas State Manager
-    class CanvasEngine {
+    class AdvancedCanvas {
       constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.shapes = [];
-        this.activeTool = 'rect';
-        this.activeColor = '#0f62fe';
+        this.undoStack = [];
+        this.redoStack = [];
+        this.selectedShapeId = null;
+        this.activeTool = 'select';
+        
+        this.isDragging = false;
+        this.dragOffset = { x: 0, y: 0 };
 
         this.init();
       }
 
       init() {
-        this.canvas.addEventListener('pointerdown', (e) => this.handlePointerDown(e));
-        
-        // Tool selectors
-        document.querySelectorAll('.tool-btn').forEach(btn => {
+        this.canvas.addEventListener('pointerdown', (e) => this.onPointerDown(e));
+        this.canvas.addEventListener('pointermove', (e) => this.onPointerMove(e));
+        this.canvas.addEventListener('pointerup', () => this.onPointerUp());
+
+        window.addEventListener('keydown', (e) => {
+          if ((e.key === 'Delete' || e.key === 'Backspace') && this.selectedShapeId) {
+            this.pushState();
+            this.shapes = this.shapes.filter(s => s.id !== this.selectedShapeId);
+            this.selectedShapeId = null;
+            this.render();
+          }
+        });
+
+        document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
           btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            this.activeTool = e.target.dataset.tool;
+            document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.activeTool = btn.dataset.tool;
           });
         });
 
-        document.getElementById('colorPicker').addEventListener('input', (e) => {
-          this.activeColor = e.target.value;
-        });
+        document.getElementById('undoBtn').onclick = () => this.undo();
+        document.getElementById('redoBtn').onclick = () => this.redo();
 
         this.render();
       }
 
-      handlePointerDown(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+      pushState() {
+        this.undoStack.push(JSON.stringify(this.shapes));
+        this.redoStack = [];
+      }
 
-        const newShape = {
-          id: crypto.randomUUID(),
-          type: this.activeTool,
-          x, y,
-          size: this.activeTool === 'rect' ? { w: 100, h: 70 } : { r: 40 },
-          color: this.activeColor
-        };
-
-        this.shapes.push(newShape);
+      undo() {
+        if (!this.undoStack.length) return;
+        this.redoStack.push(JSON.stringify(this.shapes));
+        this.shapes = JSON.parse(this.undoStack.pop());
         this.render();
+      }
+
+      redo() {
+        if (!this.redoStack.length) return;
+        this.undoStack.push(JSON.stringify(this.shapes));
+        this.shapes = JSON.parse(this.redoStack.pop());
+        this.render();
+      }
+
+      getCanvasCoords(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      onPointerDown(e) {
+        const { x, y } = this.getCanvasCoords(e);
+
+        if (this.activeTool === 'select') {
+          // Hit testing in reverse (top layer first)
+          const hit = [...this.shapes].reverse().find(s => {
+            if (s.type === 'rect') return x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h;
+            if (s.type === 'circle') return Math.hypot(x - s.x, y - s.y) <= s.r;
+            if (s.type === 'text') return x >= s.x && x <= s.x + 100 && y >= s.y - 20 && y <= s.y;
+            return false;
+          });
+
+          if (hit) {
+            this.selectedShapeId = hit.id;
+            this.isDragging = true;
+            this.dragOffset = { x: x - hit.x, y: y - hit.y };
+          } else {
+            this.selectedShapeId = null;
+          }
+        } else {
+          this.pushState();
+          const newShape = {
+            id: crypto.randomUUID(),
+            type: this.activeTool,
+            x, y,
+            w: 120, h: 80, r: 40,
+            text: 'Editable Text',
+            color: '#0f62fe'
+          };
+          this.shapes.push(newShape);
+          this.selectedShapeId = newShape.id;
+          this.activeTool = 'select';
+          document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
+          document.querySelector('.tool-btn[data-tool="select"]').classList.add('active');
+        }
+
+        this.render();
+      }
+
+      onPointerMove(e) {
+        if (!this.isDragging || !this.selectedShapeId) return;
+        const { x, y } = this.getCanvasCoords(e);
+        const selected = this.shapes.find(s => s.id === this.selectedShapeId);
+        if (selected) {
+          selected.x = x - this.dragOffset.x;
+          selected.y = y - this.dragOffset.y;
+          this.render();
+        }
+      }
+
+      onPointerUp() {
+        if (this.isDragging) {
+          this.pushState();
+          this.isDragging = false;
+        }
       }
 
       render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.shapes.forEach(shape => {
-          this.ctx.fillStyle = shape.color;
-          if (shape.type === 'rect') {
-            this.ctx.fillRect(shape.x, shape.y, shape.size.w, shape.size.h);
-          } else if (shape.type === 'circle') {
+
+        this.shapes.forEach(s => {
+          this.ctx.fillStyle = s.color;
+          if (s.type === 'rect') {
+            this.ctx.fillRect(s.x, s.y, s.w, s.h);
+          } else if (s.type === 'circle') {
             this.ctx.beginPath();
-            this.ctx.arc(shape.x, shape.y, shape.size.r, 0, Math.PI * 2);
+            this.ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
             this.ctx.fill();
+          } else if (s.type === 'text') {
+            this.ctx.font = '18px Inter, sans-serif';
+            this.ctx.fillText(s.text, s.x, s.y);
+          }
+
+          // Active selection border
+          if (s.id === this.selectedShapeId) {
+            this.ctx.strokeStyle = '#ffffff';
+            this.ctx.lineWidth = 2;
+            if (s.type === 'rect') this.ctx.strokeRect(s.x - 2, s.y - 2, s.w + 4, s.h + 4);
+            if (s.type === 'circle') {
+              this.ctx.beginPath();
+              this.ctx.arc(s.x, s.y, s.r + 3, 0, Math.PI * 2);
+              this.ctx.stroke();
+            }
           }
         });
 
-        this.updateLayerUI();
+        this.renderLayers();
+        this.renderInspector();
       }
 
-      updateLayerUI() {
+      renderLayers() {
         const container = document.getElementById('layersContainer');
-        container.innerHTML = this.shapes.map((s, i) => `
-          <li style="padding:0.5rem; background:#141414; border-radius:6px; margin-bottom:0.4rem; font-size:0.8rem; display:flex; justify-between; align-items:center;">
-            <span>${s.type === 'rect' ? '🟦 Rectangle' : '⚪ Circle'} ${i + 1}</span>
-          </li>
+        container.innerHTML = [...this.shapes].reverse().map((s, idx) => `
+          <div class="layer-item ${s.id === this.selectedShapeId ? 'selected' : ''}" data-id="${s.id}">
+            <span>${s.type === 'rect' ? '🟦 Rect' : s.type === 'circle' ? '⚪ Circle' : '💬 Text'}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">#${this.shapes.length - idx}</span>
+          </div>
         `).join('');
+
+        container.querySelectorAll('.layer-item').forEach(el => {
+          el.onclick = () => {
+            this.selectedShapeId = el.dataset.id;
+            this.render();
+          };
+        });
+      }
+
+      renderInspector() {
+        const container = document.getElementById('inspectorContent');
+        const s = this.shapes.find(item => item.id === this.selectedShapeId);
+
+        if (!s) {
+          container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">Select a shape to inspect.</p>`;
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="prop-row">
+            <label>Fill Color</label>
+            <input type="color" id="propColor" value="${s.color}">
+          </div>
+          ${s.type === 'text' ? `
+            <div class="prop-row">
+              <label>Text Content</label>
+              <input type="text" id="propText" value="${s.text}">
+            </div>
+          ` : ''}
+          <button class="btn-primary" id="deleteShapeBtn" style="width:100%; background:#da1e28; margin-top:1rem;">Delete Element</button>
+        `;
+
+        document.getElementById('propColor').oninput = (e) => {
+          s.color = e.target.value;
+          this.render();
+        };
+
+        if (s.type === 'text') {
+          document.getElementById('propText').oninput = (e) => {
+            s.text = e.target.value;
+            this.render();
+          };
+        }
+
+        document.getElementById('deleteShapeBtn').onclick = () => {
+          this.pushState();
+          this.shapes = this.shapes.filter(item => item.id !== s.id);
+          this.selectedShapeId = null;
+          this.render();
+        };
       }
     }
 
-    const engine = new CanvasEngine('stage');
+    const appCanvas = new AdvancedCanvas('stage');
 
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      alert('Design state saved directly to domain root session.');
+    document.getElementById('saveBtn').onclick = () => {
       window.location.href = App.url('/dashboard/index.html');
-    });
+    };
   </script>
 </body>
 </html>
