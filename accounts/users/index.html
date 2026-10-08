@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile | Collab Community</title>
+  <title>User Profile | Collab</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { --bg-black: #000; --panel-bg: #141414; --border: #262626; --brand-blue: #428be5; --text-muted: #888; }
@@ -14,28 +14,20 @@
     .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
 
     .profile-banner { height: 180px; background: linear-gradient(135deg, #0f62fe, #428be5); border-bottom: 1px solid var(--border); }
-    .profile-container { max-width: 1000px; margin: 0 auto; width: 100%; padding: 0 2rem; position: relative; }
-    .avatar { width: 110px; height: 110px; border-radius: 50%; background: #222; border: 4px solid var(--bg-black); margin-top: -55px; display: grid; place-items: center; font-size: 2.8rem; font-weight: 800; }
+    .profile-container { max-width: 1000px; margin: 0 auto; width: 100%; padding: 0 2rem; }
+    .avatar { width: 100px; height: 100px; border-radius: 50%; background: #222; border: 4px solid var(--bg-black); margin-top: -50px; display: grid; place-items: center; font-size: 2.5rem; font-weight: 800; }
 
-    .profile-meta { margin-top: 1rem; display: flex; justify-content: space-between; align-items: flex-start; }
-    .profile-meta h1 { font-size: 1.8rem; font-weight: 800; }
-    .profile-meta .handle { color: var(--brand-blue); font-weight: 600; font-size: 0.95rem; margin-top: 0.2rem; }
-
-    .btn-share { padding: 0.6rem 1.2rem; background: var(--panel-bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-weight: 600; cursor: pointer; }
-
-    .projects-grid { max-width: 1000px; margin: 3rem auto; width: 100%; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-    .project-card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .project-preview { height: 160px; background: #080808; display: grid; place-items: center; border-bottom: 1px solid var(--border); color: var(--text-muted); }
-    .project-details { padding: 1rem; }
+    .profile-meta { margin-top: 1rem; display: flex; justify-content: space-between; }
+    .btn-action { padding: 0.6rem 1.2rem; background: var(--panel-bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; }
   </style>
 </head>
 <body>
   <nav>
-    <a href="./index.html" class="brand-container">
+    <a href="/home/index.html" class="brand-container">
       <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
       <span>Collab</span>
     </a>
-    <a href="./editor.html" class="btn-share" style="text-decoration:none;">Open Editor</a>
+    <a href="/editor/index.html" class="btn-action">Open Editor</a>
   </nav>
 
   <div class="profile-banner"></div>
@@ -44,57 +36,22 @@
     <div id="profileHeader"></div>
   </div>
 
-  <div class="projects-grid" id="projectsGrid"></div>
-
   <script>
     const params = new URLSearchParams(window.location.search);
-    const username = (params.get('user') || 'awesomearchie124').toLowerCase();
+    const session = localStorage.getItem('collab_session');
+    const targetUser = params.get('user') || session || 'creator';
 
-    // Default Account Setup
-    const users = JSON.parse(localStorage.getItem('collab_users') || '{}');
-    if (!users['awesomearchie124']) {
-      users['awesomearchie124'] = {
-        username: 'awesomearchie124',
-        name: 'Archie Harrison',
-        bio: 'Interface designer creating vector assets on Collab.',
-        projects: [{ title: 'Design System Icons', date: 'Oct 2026' }]
-      };
-      localStorage.setItem('collab_users', JSON.stringify(users));
-    }
-
-    const user = users[username];
-    const headerEl = document.getElementById('profileHeader');
-    const gridEl = document.getElementById('projectsGrid');
-
-    if (!user) {
-      headerEl.innerHTML = `<h2 style="margin-top:2rem;">User @${username} Not Found</h2>`;
-    } else {
-      headerEl.innerHTML = `
-        <div class="avatar">${user.name.charAt(0).toUpperCase()}</div>
-        <div class="profile-meta">
-          <div>
-            <h1>${user.name}</h1>
-            <div class="handle">@${user.username}</div>
-            <p style="color:var(--text-muted); margin-top:0.5rem;">${user.bio}</p>
-          </div>
-          <button class="btn-share" onclick="navigator.clipboard.writeText(location.href); alert('Copied profile URL!');">Copy Profile Link</button>
+    document.getElementById('profileHeader').innerHTML = `
+      <div class="avatar">${targetUser.charAt(0).toUpperCase()}</div>
+      <div class="profile-meta">
+        <div>
+          <h1 style="font-size: 1.8rem; font-weight: 800;">${targetUser}</h1>
+          <div style="color: var(--brand-blue); font-weight: 600;">@${targetUser}</div>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Interface Designer & Vector Specialist on Collab.</p>
         </div>
-      `;
-
-      if (!user.projects || user.projects.length === 0) {
-        gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No published designs yet.</div>`;
-      } else {
-        gridEl.innerHTML = user.projects.map(p => `
-          <div class="project-card">
-            <div class="project-preview">❖ Vector Project</div>
-            <div class="project-details">
-              <h4 style="font-size:1rem; font-weight:600;">${p.title}</h4>
-              <p style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Saved ${p.date}</p>
-            </div>
-          </div>
-        `).join('');
-      }
-    }
+        <a href="/dashboard/index.html" class="btn-action">Dashboard</a>
+      </div>
+    `;
   </script>
 </body>
 </html>
