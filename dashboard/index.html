@@ -3,56 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Organisation | Collab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg-black: #000; --panel-bg: #121212; --border: #262626; --brand-blue: #428be5; --text-muted: #888; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background-color: var(--bg-black); color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
-    
-    nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; }
-    .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
+  <title>Dashboard | Collab</title>
+  
+  <script>
+    (function checkAuth() {
+      if (!localStorage.getItem('collab_session')) {
+        window.location.href = '/auth/personal/login/index.html';
+      }
+    })();
+  </script>
 
-    .auth-wrapper { max-width: 440px; width: 100%; margin: 4rem auto; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
-    .form-group input { width: 100%; padding: 0.75rem 0.9rem; background: #000; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.95rem; }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0c0d0e; --panel: #16171a; --border: #26272b; --brand-blue: #0f62fe; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: var(--bg); color: #fff; min-height: 100vh; display: flex; }
+
+    sidebar { width: 220px; background: var(--panel); border-right: 1px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    sidebar a { padding: 0.6rem 0.8rem; color: #a0a0a0; text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: 6px; }
+    sidebar a.active, sidebar a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+    main { flex: 1; padding: 2.5rem; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     
-    .btn-submit { width: 100%; padding: 0.8rem; background: #fff; color: #000; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 0.5rem; }
+    .btn-create { padding: 0.75rem 1.25rem; background: var(--brand-blue); color: #fff; border: none; border-radius: 6px; font-weight: 600; text-decoration: none; cursor: pointer; }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="/home/index.html" class="brand-container">
-      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><path d="M500 1000C315 1000 157 895 80 741C234 664 339 506 339 321C339 506 444 664 598 741C520 895 362 1000 500 1000Z" fill="#0f62fe"/><path d="M0 500C0 315 105 157 259 80C336 234 494 339 679 339C494 339 336 444 259 598C105 520 0 362 0 500Z" fill="#428be5"/><path d="M1000 500C1000 685 895 843 741 920C664 766 506 661 321 661C506 661 664 556 741 402C895 480 1000 638 1000 500Z" fill="#428be5"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
-      <span>Collab Enterprise</span>
-    </a>
-  </nav>
+  <sidebar>
+    <div style="font-weight: 800; font-size: 1.2rem; margin-bottom: 1.5rem; color: #fff;">Collab</div>
+    <a href="/dashboard/index.html" class="active">❖ Recents</a>
+    <a href="/dashboard/settings/index.html">⚙ Settings</a>
+    <a href="#" onclick="localStorage.removeItem('collab_session'); location.href='/home/index.html';">🚪 Sign Out</a>
+  </sidebar>
 
-  <div class="auth-wrapper">
-    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.3rem;">Register Organisation</h2>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Set up team controls, design tokens, and shared spaces.</p>
-
-    <form id="orgRegForm">
-      <div class="form-group">
-        <label>Organisation Name</label>
-        <input type="text" id="orgName" required placeholder="Acme Studios">
+  <main>
+    <div class="top-bar">
+      <div>
+        <h1 style="font-size: 1.8rem;">Recent Design Drafts</h1>
+        <p style="color: #777; font-size: 0.9rem;">Welcome back to your workspace</p>
       </div>
-      <div class="form-group">
-        <label>Admin Handle</label>
-        <input type="text" id="adminHandle" required placeholder="admin-acme">
-      </div>
-      <button type="submit" class="btn-submit">Create Team Workspace</button>
-    </form>
-  </div>
+      <a href="/editor/index.html" class="btn-create">+ New File</a>
+    </div>
 
-  <script>
-    document.getElementById('orgRegForm').onsubmit = (e) => {
-      e.preventDefault();
-      const admin = document.getElementById('adminHandle').value.trim().toLowerCase();
-      localStorage.setItem('collab_session', admin);
-      window.location.href = '/dashboard/index.html';
-    };
-  </script>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem;">
+      <a href="/editor/index.html" style="text-decoration: none; color: inherit;">
+        <div style="height: 140px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; display: grid; place-items: center;">
+          <span style="font-size: 2rem;">🎨</span>
+        </div>
+        <p style="margin-top: 0.5rem; font-weight: 600; font-size: 0.9rem;">Untitled Canvas Board</p>
+      </a>
+    </div>
+  </main>
 </body>
 </html>
