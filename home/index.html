@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home | Collab Design</title>
+  <title>Collab | Real-Time Vector Collaboration</title>
   <link rel="icon" type="image/png" href="../logo.png">
   <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,24 +34,41 @@
     .nav-links a:hover, .nav-links a.active { color: #fff; }
     .user-nav { display: flex; align-items: center; gap: 0.85rem; }
     
+    .user-pill {
+      font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem;
+      background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color);
+      max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;
+    }
+
     .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
     .btn-primary { background: var(--brand-accent); color: #fff; }
     .btn-primary:hover { background: var(--brand-blue); }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
     .btn-secondary:hover { background: var(--panel-bg); }
-    
-    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 4rem 2rem; }
-    .hero { text-align: center; margin-bottom: 4rem; }
-    .hero h1 { font-size: 3.25rem; font-weight: 800; margin-bottom: 1.25rem; line-height: 1.15; }
-    .hero p { color: var(--text-gray); font-size: 1.15rem; max-width: 680px; margin: 0 auto 2rem auto; }
-    .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
-    
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 3rem; }
-    .feature-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
-    .feature-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
-    .feature-card p { color: var(--text-gray); font-size: 0.92rem; line-height: 1.6; }
 
-    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+    /* Modal Styling */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+    .modal-overlay.active { display: flex; }
+    .auth-choice-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 420px; padding: 2rem; text-align: center; position: relative; }
+    .choice-options { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+    .choice-btn { padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--panel-bg); color: #fff; text-decoration: none; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+    .choice-btn:hover { border-color: var(--brand-accent); background: rgba(15, 98, 254, 0.1); }
+    .close-modal { position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; color: var(--text-gray); font-size: 1.25rem; cursor: pointer; }
+
+    /* Content Layout */
+    main { flex: 1; }
+    .section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .hero { text-align: center; padding-top: 6rem; padding-bottom: 5rem; }
+    .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.25rem; line-height: 1.15; }
+    .hero p { color: var(--text-gray); font-size: 1.2rem; max-width: 720px; margin: 0 auto 2.5rem auto; }
+    .hero-buttons { display: flex; gap: 1.25rem; justify-content: center; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+    .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
+    .card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+    .card p { color: var(--text-gray); line-height: 1.6; font-size: 0.95rem; }
+
+    footer { border-top: 1px solid var(--border-color); padding: 2.5rem 2rem; text-align: center; color: var(--text-gray); font-size: 0.88rem; background: var(--panel-bg); margin-top: 4rem; }
   </style>
 </head>
 <body>
@@ -63,69 +80,98 @@
     </a>
 
     <nav class="nav-links">
-      <a href="../home/" class="active">Home</a>
-      <a href="../dashboard/">Dashboard</a>
       <a href="../products/">Products</a>
       <a href="../solutions/">Solutions</a>
       <a href="../resources/">Resources</a>
       <a href="../pricing/">Pricing</a>
-      <a href="../editor/">Editor</a>
-      <a href="../settings/">Settings</a>
     </nav>
 
     <div class="user-nav" id="nav-actions"></div>
   </header>
 
   <main>
-    <div class="hero">
-      <h1>Real-Time Design Collaboration for Fast Creative Teams</h1>
-      <p>Design, prototype, and inspect vector assets in real time with shared workspaces built for modern engineering and product workflows.</p>
+    <section class="section hero">
+      <h1>The Collaborative Vector Engine for Professional Teams</h1>
+      <p>Collab provides real-time multi-user vector editing, seamless asset inspection, and enterprise workspace controls.</p>
       <div class="hero-buttons">
-        <a href="../dashboard/" class="btn btn-primary" style="font-size: 1rem; padding: 0.75rem 1.75rem;">Go to Workspace Dashboard</a>
-        <a href="../editor/" class="btn btn-secondary" style="font-size: 1rem; padding: 0.75rem 1.75rem;">Launch Canvas Editor</a>
+        <button class="btn btn-primary" onclick="openLoginModal()" style="font-size: 1rem; padding: 0.8rem 2rem;">Get Started</button>
+        <a href="../pricing/" class="btn btn-secondary" style="font-size: 1rem; padding: 0.8rem 2rem;">View Pricing</a>
       </div>
-    </div>
+    </section>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>🚀 Vector Canvas Engine</h3>
-        <p>Render complex artwork and UI frames with full GPU hardware acceleration and sub-pixel precision.</p>
+    <section class="section">
+      <h2 style="text-align: center; font-size: 2.25rem; margin-bottom: 3rem;">Why Leading Teams Choose Collab</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>⚡ Real-Time Multiplayer</h3>
+          <p>Work alongside team members simultaneously with sub-millisecond cursor state syncing.</p>
+        </div>
+        <div class="card">
+          <h3>🎨 Sub-Pixel Precision</h3>
+          <p>Render complex artwork and responsive component frameworks with hardware-accelerated canvas speed.</p>
+        </div>
+        <div class="card">
+          <h3>🔒 Enterprise Governance</h3>
+          <p>Control workspace visibility, enforce SSO authentication, and manage granular permissions.</p>
+        </div>
       </div>
-      <div class="feature-card">
-        <h3>⚡ Live Multiplayer Sync</h3>
-        <p>Collaborate with concurrent team cursors, live element state sync, and real-time chat commentary.</p>
-      </div>
-      <div class="feature-card">
-        <h3>🏢 Enterprise SSO & Workspaces</h3>
-        <p>Isolate personal creative work from company projects with dedicated organisation management and permissions.</p>
-      </div>
-    </div>
+    </section>
+
+    <section class="section" style="background: var(--panel-bg); border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Ready to upgrade your design workflow?</h2>
+      <p style="color: var(--text-gray); margin-bottom: 2rem;">Join creative teams building software faster with Collab.</p>
+      <a href="../pricing/" class="btn btn-primary" style="padding: 0.8rem 2rem;">Explore Plans & Options</a>
+    </section>
   </main>
 
+  <div class="modal-overlay" id="login-modal">
+    <div class="auth-choice-card">
+      <button class="close-modal" onclick="closeLoginModal()">✕</button>
+      <h3>Sign In to Collab</h3>
+      <p>Choose your workspace type to continue</p>
+      
+      <div class="choice-options">
+        <a href="../auth/organisation/login/" class="choice-btn">
+          <span>🏢 Organisation Login</span>
+          <span>→</span>
+        </a>
+        <a href="../auth/personal/login/" class="choice-btn">
+          <span>👤 Personal Login</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.
+  </footer>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', initSession);
+
+    function initSession() {
       const session = JSON.parse(localStorage.getItem('collab_user_session'));
       const navActions = document.getElementById('nav-actions');
 
       if (session && session.isLoggedIn) {
         navActions.innerHTML = `
-          <span class="user-pill">${session.email}</span>
+          <span class="user-pill" title="${session.email}">${session.email}</span>
+          <a href="../dashboard/" class="btn btn-secondary">Dashboard</a>
           <a href="../settings/" class="btn btn-secondary">Settings</a>
           <button class="btn btn-secondary" onclick="logout()">Log Out</button>
         `;
       } else {
         navActions.innerHTML = `
-          <a href="../auth/organisation/login/" class="btn btn-secondary">Org Login</a>
-          <a href="../auth/personal/login/" class="btn btn-secondary">Personal Login</a>
+          <button class="btn btn-secondary" onclick="openLoginModal()">Log In</button>
           <a href="../auth/organisation/register/" class="btn btn-primary">Register</a>
         `;
       }
-    });
-
-    function logout() {
-      localStorage.removeItem('collab_user_session');
-      window.location.reload();
     }
+
+    function openLoginModal() { document.getElementById('login-modal').classList.add('active'); }
+    function closeLoginModal() { document.getElementById('login-modal').classList.remove('active'); }
+    function logout() { localStorage.removeItem('collab_user_session'); window.location.reload(); }
   </script>
 </body>
 </html>
