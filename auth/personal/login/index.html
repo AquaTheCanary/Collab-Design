@@ -3,50 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Login | Collab</title>
-  <link rel="icon" type="image/png" href="../../logo.png">
-  <link rel="shortcut icon" type="image/png" href="../../logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../style.css">
+  <title>Personal Login | Collab Design</title>
+  
+  <!-- Points 3 levels up to root logo.png -->
+  <link rel="icon" type="image/png" href="../../../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../../../logo.png">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #0a0a0c;
+      --panel-bg: #141418;
+      --border-color: #2a2a32;
+      --brand-accent: #0f62fe;
+      --text-gray: #a0a0ab;
+      --text-light: #f4f4f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
+      background-color: rgba(10, 10, 12, 0.9);
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
+    .brand img { height: 34px; width: auto; object-fit: contain; }
+    
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 400px; padding: 2.5rem; }
+    .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
+    .auth-card p { color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem; }
+    
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
+
+    .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
+  </style>
 </head>
 <body>
 
   <header>
-    <a href="../../home/" class="brand">
-      <img src="../../logo.png" alt="Collab Design Logo">
-      <span>Collab</span>
+    <a href="../../../home/" class="brand">
+      <img src="../../../logo.png" alt="Collab Design Logo">
+      <span>Collab Design</span>
     </a>
-
-    <div class="user-nav" id="nav-actions" data-depth="2"></div>
   </header>
 
   <main>
-    <div class="card auth-card">
+    <div class="auth-card">
       <h2>Personal Login</h2>
-      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.25rem;">Sign in to your personal account</p>
+      <p>Sign in to your personal creator account.</p>
 
-      <form id="personal-login-form">
+      <form id="personal-login">
         <div class="form-group">
-          <label for="personal-email">Email Address</label>
-          <input type="email" id="personal-email" required placeholder="you@example.com">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="you@example.com">
         </div>
-
         <div class="form-group">
-          <label for="personal-pass">Password</label>
-          <input type="password" id="personal-pass" required placeholder="••••••••">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
+        <button type="submit" class="btn">Sign In</button>
       </form>
+
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-gray);">
+        Don't have an account? <a href="../register/" style="color: var(--brand-accent); text-decoration: none;">Register here</a>
+      </div>
     </div>
   </main>
 
-  <script src="../../auth.js"></script>
   <script>
-    document.getElementById('personal-login-form').addEventListener('submit', (e) => {
+    document.getElementById('personal-login').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('personal-email').value;
-      handleLogin(email, 'personal', '../../home/');
+      const email = document.getElementById('email').value;
+      const session = { isLoggedIn: true, email: email, type: 'personal' };
+      localStorage.setItem('collab_user_session', JSON.stringify(session));
+      window.location.href = '../../../home/';
     });
   </script>
 </body>
