@@ -3,106 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plans and Pricing | Collab</title>
+  <title>Plans & Pricing | Collab</title>
   <link rel="icon" type="image/png" href="../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg: #000; --panel: #121212; --border: #262626; --brand: #0f62fe; --text-muted: #888; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg); color: #fff; min-height: 100vh; padding-bottom: 5rem; }
-
-    nav { height: 68px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-    .brand-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.35rem; }
-
-    .header { text-align: center; margin: 4rem auto 2rem; max-width: 600px; }
-    .pricing-table-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; overflow-x: auto; border-radius: 25px }
-
-    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 0px solid var(--border); border-radius: 25px; }
-    th, td { padding: 1.2rem 1.5rem; text-align: left; border-bottom: 0px solid var(--border); }
-    th { background: #181818; font-size: 1rem; }
-    
-    .feature-name { font-weight: 600; font-size: 0.95rem; }
-    .check { color: #24a148; font-weight: 700; }
-    .cross { color: #525252; }
-
-    .btn-plan { display: inline-block; padding: 0.6rem 1.2rem; background: #fff; color: #000; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: 0.85rem; }
-  </style>
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-  <nav>
-    <a href="#" id="homeBrand" class="brand-container">
-      <svg width="32" height="32" viewBox="0 0 1000 1000" fill="none"><path d="M500 0C685 0 843 105 920 259C766 336 661 494 661 679C661 494 556 336 402 259C480 105 638 0 500 0Z" fill="#0f62fe"/><circle cx="500" cy="500" r="130" fill="#0f62fe"/></svg>
-      <span>Collab</span>
+
+  <header>
+    <a href="../home/" class="brand">
+      <img src="../logo.png" alt="Collab Design Logo">
+      <span>Collab<span>
     </a>
-  </nav>
 
-  <div class="header">
-    <h1 style="font-size: 2.5rem; font-weight: 800;">Plans & Pricing</h1>
-    <p style="color: var(--text-muted); margin-top: 0.5rem;">Expand your workflow with a paid plan.</p>
-  </div>
+    <nav class="nav-links">
+      <a href="../products/">Products</a>
+      <a href="../solutions/">Solution</a>
+      <a href="../resources/">Resources</a>
+    </nav>
 
-  <div class="pricing-table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Features</th>
-          <th>Free<br><span style="font-size:0.8rem; color:var(--text-muted);">-</span></th>
-          <th>Team<br><span style="font-size:0.8rem; color:var(--text-muted);">$25/seat/month</span></th>
-          <th>Organisation<br><span style="font-size:0.8rem; color:var(--text-muted);">$50/seat/month</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="feature-name">Number of Drafts</td>
-          <td>25 Drafts</td>
-          <td>100 Drafts per person</td>
-          <td>Unlimited Drafts</td>
-        </tr>
-        <tr>
-          <td class="feature-name">Number of Files</td>
-          <td>3 Files</td>
-          <td>25 Files</td>
-          <td>Unlimited Files</td>
-        </tr>
-        <tr>
-          <td class="feature-name">Canvas</td>
-          <td class="check">✓</td>
-          <td class="check">✓</td>
-          <td class="check">✓</td>
-        </tr>
-        <tr>
-          <td class="feature-name">Undo/Redo Stack History</td>
-          <td>10 Steps</td>
-          <td>Unlimited</td>
-          <td>Unlimited</td>
-        </tr>
-        <tr>
-          <td class="feature-name">Customer Support</td>
-          <td class="cross">Basic</td>
-          <td class="cross">Basic</td>
-          <td class="check">Priority</td>
-        </tr>
-        <tr>
-          <td class="feature-name">SAML Single Sign-On (SSO)</td>
-          <td class="cross">✕</td>
-          <td class="cross">✕</td>
-          <td class="check">✓</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><a href="/auth/personal/register" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Choose Free Plan</a></td>
-          <td><a href="/select?plan=team" class="btnRegPro btn-plan">Choose Team Plan</a></td>
-          <td><a href="/contact" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Contact Sales</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="user-nav" id="nav-actions" data-depth="1"></div>
+  </header>
 
-  <script>
-    document.getElementById('homeBrand').href = App.url('/home/');
-    document.querySelector('.btnRegFree').href = App.url('/auth/personal/register/');
-    document.querySelector('.btnRegPro').href = App.url('/auth/personal/register/');
-    document.querySelector('.btnRegOrg').href = App.url('/contact/');
-  </script>
+  <main>
+    <h2>Plans and Pricing</h2>
+    <h2>Plans designed for every team.</h2>
+    <p style="color: var(--text-gray); margin-bottom: 2rem;">Expand your team with a paid plan</p>
+    <p style="color: var(--text-gray); margin-bottom: 2rem;">or, stick to the free plan, with limited features.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+      <div class="card">
+        <h3>Team</h3>
+        <p style="color: var(--text-gray); margin: 0.5rem 0 1.5rem 0;">For small groups who want an easy solution</p>
+        <h2 style="margin-bottom: 1.5rem;">£10/user/month</h2>
+        <a href="../personal/register/" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+      </div>
+
+      <div class="card" style="border-color: var(--brand-accent);">
+        <h3>Organisation</h3>
+        <p style="color: var(--text-gray); margin: 0.5rem 0 1.5rem 0;">For whole companies who want to expand their workflow</p>
+        <h2 style="margin-bottom: 1.5rem;">£25/user/month</h2>
+        <a href="../contact/sales" class="btn btn-primary" style="width: 100%;">Contact Sales</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="../auth.js"></script>
 </body>
 </html>
