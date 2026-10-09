@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Collab Design</title>
+  <link rel="icon" type="image/png" href="../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header>
+    <a href="../home/" class="brand">
+      <img src="../logo.png" alt="Collab Design Logo">
+      <span>Collab Design</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="../home/">Home</a>
+      <a href="../pricing/">Pricing</a>
+      <a href="../editor/">Editor</a>
+      <a href="../settings/">Settings</a>
+    </nav>
+
+    <div class="user-nav" id="nav-actions" data-depth="1"></div>
+  </header>
+
+  <main>
+    <div class="card" style="max-width: 600px;">
+      <h2>Account Settings</h2>
+      <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Manage your active session preferences.</p>
+
+      <div class="form-group">
+        <label>Active User Email</label>
+        <input type="text" id="settings-email" readonly style="opacity: 0.7; cursor: not-allowed;">
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <button class="btn btn-secondary" onclick="handleLogout('../')">Sign Out of Account</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="../auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = JSON.parse(localStorage.getItem('collab_user_session'));
+      const emailInput = document.getElementById('settings-email');
+      if (session && session.email) {
+        emailInput.value = session.email;
+      } else {
+        emailInput.value = 'Not logged in';
+      }
+    });
+  </script>
+</body>
+</html>
