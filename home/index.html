@@ -6,34 +6,126 @@
   <title>Home | Collab Design</title>
   <link rel="icon" type="image/png" href="../logo.png">
   <link rel="shortcut icon" type="image/png" href="../logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #0a0a0c;
+      --panel-bg: #141418;
+      --card-bg: #1a1a20;
+      --border-color: #2a2a32;
+      --brand-accent: #0f62fe;
+      --brand-blue: #428be5;
+      --text-gray: #a0a0ab;
+      --text-light: #f4f4f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
+      background-color: rgba(10, 10, 12, 0.9); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
+    .brand img { height: 34px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
+    
+    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--brand-accent); color: #fff; }
+    .btn-primary:hover { background: var(--brand-blue); }
+    .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background: var(--panel-bg); }
+    
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 4rem 2rem; }
+    .hero { text-align: center; margin-bottom: 4rem; }
+    .hero h1 { font-size: 3.25rem; font-weight: 800; margin-bottom: 1.25rem; line-height: 1.15; }
+    .hero p { color: var(--text-gray); font-size: 1.15rem; max-width: 680px; margin: 0 auto 2rem auto; }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
+    
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .feature-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
+    .feature-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .feature-card p { color: var(--text-gray); font-size: 0.92rem; line-height: 1.6; }
+
+    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+  </style>
 </head>
 <body>
 
   <header>
     <a href="../home/" class="brand">
       <img src="../logo.png" alt="Collab Design Logo">
-      <span>Collab</span>
+      <span>Collab Design</span>
     </a>
 
     <nav class="nav-links">
+      <a href="../home/" class="active">Home</a>
+      <a href="../dashboard/">Dashboard</a>
       <a href="../products/">Products</a>
       <a href="../solutions/">Solutions</a>
       <a href="../resources/">Resources</a>
       <a href="../pricing/">Pricing</a>
+      <a href="../editor/">Editor</a>
+      <a href="../settings/">Settings</a>
     </nav>
 
-    <div class="user-nav" id="nav-actions" data-depth="1"></div>
+    <div class="user-nav" id="nav-actions"></div>
   </header>
 
   <main>
-    <div class="card">
-      <h2>Welcome to Collab</h2>
-      <p style="color: var(--text-gray); margin-top: 0.5rem;">The collaborative suite built for modern creative teams.</p>
+    <div class="hero">
+      <h1>Real-Time Design Collaboration for Fast Creative Teams</h1>
+      <p>Design, prototype, and inspect vector assets in real time with shared workspaces built for modern engineering and product workflows.</p>
+      <div class="hero-buttons">
+        <a href="../dashboard/" class="btn btn-primary" style="font-size: 1rem; padding: 0.75rem 1.75rem;">Go to Workspace Dashboard</a>
+        <a href="../editor/" class="btn btn-secondary" style="font-size: 1rem; padding: 0.75rem 1.75rem;">Launch Canvas Editor</a>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>🚀 Vector Canvas Engine</h3>
+        <p>Render complex artwork and UI frames with full GPU hardware acceleration and sub-pixel precision.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚡ Live Multiplayer Sync</h3>
+        <p>Collaborate with concurrent team cursors, live element state sync, and real-time chat commentary.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🏢 Enterprise SSO & Workspaces</h3>
+        <p>Isolate personal creative work from company projects with dedicated organisation management and permissions.</p>
+      </div>
     </div>
   </main>
 
-  <script src="../auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = JSON.parse(localStorage.getItem('collab_user_session'));
+      const navActions = document.getElementById('nav-actions');
+
+      if (session && session.isLoggedIn) {
+        navActions.innerHTML = `
+          <span class="user-pill">${session.email}</span>
+          <a href="../settings/" class="btn btn-secondary">Settings</a>
+          <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+        `;
+      } else {
+        navActions.innerHTML = `
+          <a href="../auth/organisation/login/" class="btn btn-secondary">Org Login</a>
+          <a href="../auth/personal/login/" class="btn btn-secondary">Personal Login</a>
+          <a href="../auth/organisation/register/" class="btn btn-primary">Register</a>
+        `;
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('collab_user_session');
+      window.location.reload();
+    }
+  </script>
 </body>
 </html>
