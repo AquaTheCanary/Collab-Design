@@ -3,35 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Collab</title>
-  <link rel="icon" type="image/png" href="../logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { background: #000; color: #fff; min-height: 100vh; display: grid; place-items: center; font-family: 'Inter', sans-serif; }
-    .card { width: 100%; max-width: 380px; padding: 2rem; background: #111; border: 1px solid #222; border-radius: 12px; }
-    input { width: 100%; padding: 0.75rem; margin: 0.5rem 0 1rem; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; }
-    button { width: 100%; padding: 0.75rem; background: #0f62fe; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-  </style>
+  <title>Personal Login | Collab</title>
+  <link rel="icon" type="image/png" href="../../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../../logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
-  <div class="card">
-    <h2 style="margin-bottom: 1rem;">Welcome back</h2>
-    <form id="loginForm">
-      <label style="font-size: 0.85rem; color: #888;">Username</label>
-      <input type="text" id="username" required placeholder="Enter handle">
-      <button type="submit">Log In</button>
-    </form>
-  </div>
 
+  <header>
+    <a href="../../home/" class="brand">
+      <img src="../../logo.png" alt="Collab Design Logo">
+      <span>Collab</span>
+    </a>
+
+    <div class="user-nav" id="nav-actions" data-depth="2"></div>
+  </header>
+
+  <main>
+    <div class="card auth-card">
+      <h2>Personal Login</h2>
+      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.25rem;">Sign in to your personal account</p>
+
+      <form id="personal-login-form">
+        <div class="form-group">
+          <label for="personal-email">Email Address</label>
+          <input type="email" id="personal-email" required placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="personal-pass">Password</label>
+          <input type="password" id="personal-pass" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="../../auth.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
+    document.getElementById('personal-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const user = document.getElementById('username').value.trim();
-      if (user) {
-        App.setSession(user);
-        // Automatically redirects to the editor relative to your new custom domain root
-        window.location.href = App.url('/editor/index.html');
-      }
+      const email = document.getElementById('personal-email').value;
+      handleLogin(email, 'personal', '../../home/');
     });
   </script>
 </body>
