@@ -35,9 +35,8 @@
     .btn-secondary { background: transparent; border: 1px solid var(--border-color); color: #fff; }
     .error-msg { color: var(--danger-red); font-size: 0.82rem; margin-top: 0.4rem; display: none; }
 
-    /* Step 2 Plan Selection Overlay */
     .step-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 2000; }
-    .plan-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 480px; padding: 2.5rem; text-align: center; }
+    .modal-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 460px; padding: 2.5rem; text-align: center; }
 
     footer { border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-gray); font-size: 0.85rem; }
   </style>
@@ -52,13 +51,17 @@
   </header>
 
   <main>
-    <div class="auth-card" id="step-1">
+    <div class="auth-card">
       <h2>Register Organisation</h2>
-      <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Must use a valid company email domain.</p>
+      <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Enter work details to start workspace setup.</p>
 
       <form id="org-register-form">
         <div class="form-group">
-          <label for="org-title">Organisation Title</label>
+          <label for="admin-name">Full Name</label>
+          <input type="text" id="admin-name" required placeholder="Alex Johnson">
+        </div>
+        <div class="form-group">
+          <label for="org-title">Organisation Name</label>
           <input type="text" id="org-title" required placeholder="Acme Studios">
         </div>
         <div class="form-group">
@@ -66,16 +69,30 @@
           <input type="email" id="work-email" required placeholder="admin@company.com">
           <div class="error-msg" id="email-error">Public email domains (gmail, outlook, yahoo, etc.) are restricted.</div>
         </div>
-        <button type="submit" class="btn">Continue to Plan Selection →</button>
+        <button type="submit" class="btn">Send Verification Code →</button>
       </form>
     </div>
   </main>
 
-  <!-- Step 2 Modal: Plan Prompt -->
-  <div class="step-overlay" id="step-2">
-    <div class="plan-card">
+  <!-- Step 2: Vercel Email Verification Simulation -->
+  <div class="step-overlay" id="otp-step">
+    <div class="modal-card">
+      <div style="font-size: 0.8rem; color: var(--brand-accent); font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">VERCEL AUTH SERVICE</div>
+      <h2>Verify Email Address</h2>
+      <p style="color: var(--text-gray); margin-bottom: 1.5rem;">We sent a 6-digit verification code to your email.</p>
+      
+      <div class="form-group">
+        <input type="text" id="otp-code" placeholder="Enter code (e.g. 123456)" style="text-align: center; font-size: 1.2rem; letter-spacing: 0.2em;" maxlength="6">
+      </div>
+      <button class="btn" onclick="verifyOTP()">Verify & Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Plan Selection -->
+  <div class="step-overlay" id="plan-step">
+    <div class="modal-card">
       <h2>Select Your Collab Tier</h2>
-      <p style="color: var(--text-gray); margin-bottom: 2rem;">Choose whether to upgrade or stay on the free tier.</p>
+      <p style="color: var(--text-gray); margin-bottom: 2rem;">Choose whether to upgrade or start with the free plan.</p>
       
       <div style="display: flex; flex-direction: column; gap: 1rem;">
         <button class="btn" onclick="completeRegistration('Organisation Pro ($29/mo)')">Upgrade to Organisation Pro ($29/mo)</button>
@@ -90,10 +107,11 @@
 
   <script>
     const restrictedDomains = ['gmail.com', 'outlook.com', 'yahoo.com', 'gmx.com', 'hotmail.com', 'icloud.com'];
-    let pendingEmail = '';
+    let pendingName = '', pendingEmail = '';
 
     document.getElementById('org-register-form').addEventListener('submit', (e) => {
       e.preventDefault();
+      const name = document.getElementById('admin-name').value.trim();
       const email = document.getElementById('work-email').value.toLowerCase().trim();
       const errorDiv = document.getElementById('email-error');
 
@@ -106,13 +124,22 @@
       }
 
       errorDiv.style.display = 'none';
+      pendingName = name;
       pendingEmail = email;
-      document.getElementById('step-2').style.display = 'flex';
+      document.getElementById('otp-step').style.display = 'flex';
     });
+
+    function verifyOTP() {
+      const code = document.getElementById('otp-code').value;
+      if (code.length < 4) { alert('Please enter a valid verification code.'); return; }
+      document.getElementById('otp-step').style.display = 'none';
+      document.getElementById('plan-step').style.display = 'flex';
+    }
 
     function completeRegistration(plan) {
       const session = {
         isLoggedIn: true,
+        name: pendingName,
         email: pendingEmail,
         type: 'organisation',
         plan: plan
