@@ -1,2 +1,127 @@
-<p>Prroducts page</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | Collab Design</title>
+  <link rel="icon" type="image/png" href="../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #0a0a0c;
+      --panel-bg: #141418;
+      --card-bg: #1a1a20;
+      --border-color: #2a2a32;
+      --brand-accent: #0f62fe;
+      --brand-blue: #428be5;
+      --text-gray: #a0a0ab;
+      --text-light: #f4f4f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
+      background-color: rgba(10, 10, 12, 0.9); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
+    .brand img { height: 34px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
+    
+    .btn { padding: 0.55rem 1.15rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--brand-accent); color: #fff; }
+    .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+    
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 3.5rem 2rem; }
+    .hero { text-align: center; margin-bottom: 4rem; }
+    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem; }
+    .hero p { color: var(--text-gray); font-size: 1.1rem; max-width: 650px; margin: 0 auto; }
+    
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; transition: border 0.2s; }
+    .product-card:hover { border-color: var(--brand-accent); }
+    .product-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem; color: #fff; }
+    .product-card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    
+    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+  </style>
+</head>
+<body>
 
+  <header>
+    <a href="../home/" class="brand">
+      <img src="../logo.png" alt="Collab Design Logo">
+      <span>Collab Design</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="../home/">Home</a>
+      <a href="../products/" class="active">Products</a>
+      <a href="../solutions/">Solutions</a>
+      <a href="../resources/">Resources</a>
+      <a href="../pricing/">Pricing</a>
+      <a href="../editor/">Editor</a>
+    </nav>
+
+    <div class="user-nav" id="nav-actions"></div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Built for Modern Design Teams</h1>
+      <p>Discover our suite of high-performance tools engineered for vector graphics, UI prototyping, and design system management.</p>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card">
+        <h3>Vector Canvas Studio</h3>
+        <p>A GPU-accelerated design canvas capable of rendering millions of vector nodes in real time without lag.</p>
+        <a href="../editor/" class="btn btn-primary">Launch Studio Editor</a>
+      </div>
+
+      <div class="product-card">
+        <h3>Real-Time Multiplayer Engine</h3>
+        <p>Collaborate with live multiplayer cursors, synchronized state management, and real-time commentary directly on screen.</p>
+        <a href="../organisation/register/" class="btn btn-secondary">Try Team Collaboration</a>
+      </div>
+
+      <div class="product-card">
+        <h3>Design System Inspector</h3>
+        <p>Automatically extract CSS tokens, color variables, typography scales, and production-ready SVG graphics.</p>
+        <a href="../resources/" class="btn btn-secondary">Read Docs</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = JSON.parse(localStorage.getItem('collab_user_session'));
+      const navActions = document.getElementById('nav-actions');
+
+      if (session && session.isLoggedIn) {
+        navActions.innerHTML = `
+          <span class="user-pill">${session.email}</span>
+          <a href="../settings/" class="btn btn-secondary">Settings</a>
+          <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+        `;
+      } else {
+        navActions.innerHTML = `
+          <a href="../organisation/login/" class="btn btn-secondary">Org Login</a>
+          <a href="../personal/login/" class="btn btn-secondary">Personal Login</a>
+        `;
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('collab_user_session');
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
