@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Login | Collab</title>
+  <title>Personal Register | Collab</title>
+  
+  <!-- Browser Tab Icon (Points up two levels to root logo.png) -->
   <link rel="icon" type="image/png" href="../../logo.png">
   <link rel="shortcut icon" type="image/png" href="../../logo.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
 </head>
@@ -17,35 +20,47 @@
       <span>Collab Design</span>
     </a>
 
+    <!-- Marked as depth 2 for relative path handling -->
     <div class="user-nav" id="nav-actions" data-depth="2"></div>
   </header>
 
   <main>
     <div class="card auth-card">
-      <h2>Personal Login</h2>
-      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.25rem;">Sign in to your personal account</p>
+      <h2>Create Personal Account</h2>
+      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.25rem;">Sign up for individual access</p>
 
-      <form id="personal-login-form">
+      <form id="personal-reg-form">
         <div class="form-group">
-          <label for="personal-email">Email Address</label>
-          <input type="email" id="personal-email" required placeholder="you@example.com">
+          <label for="personal-name">Full Name</label>
+          <input type="text" id="personal-name" required placeholder="Alex Johnson">
         </div>
 
         <div class="form-group">
-          <label for="personal-pass">Password</label>
-          <input type="password" id="personal-pass" required placeholder="••••••••">
+          <label for="personal-reg-email">Email Address</label>
+          <input type="email" id="personal-reg-email" required placeholder="you@example.com">
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
+        <div class="form-group">
+          <label for="personal-reg-pass">Password</label>
+          <input type="password" id="personal-reg-pass" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Create Account</button>
       </form>
+
+      <div style="margin-top: 1.25rem; text-align: center; font-size: 0.85rem; color: var(--text-gray);">
+        Already have an account? <a href="../login/" style="color: var(--brand-blue); text-decoration: none; font-weight: 600;">Sign In</a>
+      </div>
     </div>
   </main>
 
   <script src="../../auth.js"></script>
   <script>
-    document.getElementById('personal-login-form').addEventListener('submit', (e) => {
+    document.getElementById('personal-reg-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('personal-email').value;
+      const email = document.getElementById('personal-reg-email').value;
+      
+      // Save session as personal account type and redirect to home
       handleLogin(email, 'personal', '../../home/');
     });
   </script>
