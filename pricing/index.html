@@ -38,7 +38,7 @@
 
   <div class="header">
     <h1 style="font-size: 2.5rem; font-weight: 800;">Plans & Pricing</h1>
-    <p style="color: var(--text-muted); margin-top: 0.5rem;">Expand your workflow with a paid plan. You can also stick to the free plan, with limited features.</p>
+    <p style="color: var(--text-muted); margin-top: 0.5rem;">Expand your workflow with a paid plan.</p>
   </div>
 
   <div class="pricing-table-wrapper">
@@ -90,16 +90,16 @@
         </tr>
         <tr>
           <td></td>
-          <td><a href="#" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Choose Free Plan</a></td>
-          <td><a href="#" class="btnRegPro btn-plan">Choose Team Plan</a></td>
-          <td><a href="#" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Contact Sales</a></td>
+          <td><a href="/plan=free" class="btnRegFree btn-plan" style="background:#262626; color:#fff;">Choose Free Plan</a></td>
+          <td><a href="/plan=team" class="btnRegPro btn-plan">Choose Team Plan</a></td>
+          <td><a href="/contact" class="btnRegOrg btn-plan" style="background:var(--brand); color:#fff;">Contact Sales</a></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <script>
-    document.getElementById('homeBrand').href = App.url('/home/index.html');
+    document.getElementById('homeBrand').href = App.url('/home/');
     document.querySelector('.btnRegFree').href = App.url('/auth/personal/register/');
     document.querySelector('.btnRegPro').href = App.url('/auth/personal/register/');
     document.querySelector('.btnRegOrg').href = App.url('/contact/');
