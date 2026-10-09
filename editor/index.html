@@ -3,11 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editor | Collab</title>
+  <title>Settings | Collab Design</title>
   <link rel="icon" type="image/png" href="../logo.png">
   <link rel="shortcut icon" type="image/png" href="../logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #0a0a0c;
+      --panel-bg: #141418;
+      --border-color: #2a2a32;
+      --brand-accent: #0f62fe;
+      --brand-blue: #428be5;
+      --text-gray: #a0a0ab;
+      --text-light: #f4f4f8;
+      --danger-red: #da1e28;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
+      background-color: rgba(10, 10, 12, 0.9); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
+    .brand img { height: 34px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
+    
+    .btn { padding: 0.55rem 1.15rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--brand-accent); color: #fff; }
+    .btn-primary:hover { background: var(--brand-blue); }
+    .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+    .btn-danger { background: var(--danger-red); color: #fff; }
+    
+    main { flex: 1; max-width: 800px; width: 100%; margin: 0 auto; padding: 3.5rem 2rem; }
+    .settings-title { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+    
+    .settings-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+    .settings-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .settings-card p { font-size: 0.88rem; color: var(--text-gray); margin-bottom: 1.5rem; }
+    
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
+
+    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+  </style>
 </head>
 <body>
 
@@ -19,23 +64,82 @@
 
     <nav class="nav-links">
       <a href="../home/">Home</a>
+      <a href="../dashboard/">Dashboard</a>
+      <a href="../products/">Products</a>
+      <a href="../solutions/">Solutions</a>
+      <a href="../resources/">Resources</a>
       <a href="../pricing/">Pricing</a>
       <a href="../editor/">Editor</a>
-      <a href="../settings/">Settings</a>
+      <a href="../settings/" class="active">Settings</a>
     </nav>
 
-    <div class="user-nav" id="nav-actions" data-depth="1"></div>
+    <div class="user-nav" id="nav-actions"></div>
   </header>
 
   <main>
-    <div class="card" style="min-height: 400px; display: flex; align-items: center; justify-content: center; text-align: center;">
-      <div>
-        <h2>Canvas Workspace</h2>
-        <p style="color: var(--text-gray); margin-top: 0.5rem;">Your active design canvas will load here.</p>
+    <h1 class="settings-title">Account Settings</h1>
+
+    <div class="settings-card">
+      <h3>User Profile Information</h3>
+      <p>View or update your current user credentials.</p>
+
+      <div class="form-group">
+        <label for="email-display">Active Session Email</label>
+        <input type="text" id="email-display" readonly style="opacity: 0.7; cursor: not-allowed;">
+      </div>
+      <div class="form-group">
+        <label for="user-type">Account Type</label>
+        <input type="text" id="user-type" readonly style="opacity: 0.7; cursor: not-allowed;">
+      </div>
+    </div>
+
+    <div class="settings-card" style="border-color: var(--danger-red);">
+      <h3 style="color: var(--danger-red);">Session Security</h3>
+      <p>Sign out of your active browser session or clear local site data.</p>
+      
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn btn-secondary" onclick="logout()">Sign Out</button>
+        <button class="btn btn-danger" onclick="clearCache()">Clear Local Cache</button>
       </div>
     </div>
   </main>
 
-  <script src="../auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = JSON.parse(localStorage.getItem('collab_user_session'));
+      const navActions = document.getElementById('nav-actions');
+      const emailField = document.getElementById('email-display');
+      const typeField = document.getElementById('user-type');
+
+      if (session && session.isLoggedIn) {
+        emailField.value = session.email;
+        typeField.value = session.type || 'Personal Account';
+
+        navActions.innerHTML = `
+          <span class="user-pill">${session.email}</span>
+          <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+        `;
+      } else {
+        emailField.value = 'Not logged in';
+        typeField.value = 'Guest';
+
+        navActions.innerHTML = `
+          <a href="../auth/organisation/login/" class="btn btn-secondary">Org Login</a>
+          <a href="../auth/personal/login/" class="btn btn-secondary">Personal Login</a>
+        `;
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('collab_user_session');
+      window.location.href = '../home/';
+    }
+
+    function clearCache() {
+      localStorage.clear();
+      alert('Local workspace cache cleared successfully.');
+      window.location.href = '../home/';
+    }
+  </script>
 </body>
 </html>
