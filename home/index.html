@@ -3,30 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home | Collab Design: The collaborative vector engine for professional teams</title>
+  <title>Collab | Real-Time Vector Collaboration</title>
   <link rel="icon" type="image/png" href="../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --bg-black: #0a0a0c; --panel-bg: #141418; --card-bg: #1a1a20; --border-color: #2a2a32; --brand-accent: #0f62fe; --text-gray: #a0a0ab; --text-light: #f4f4f8; }
+    :root {
+      --bg-black: #0a0a0c;
+      --panel-bg: #141418;
+      --card-bg: #1a1a20;
+      --border-color: #2a2a32;
+      --brand-accent: #0f62fe;
+      --brand-blue: #428be5;
+      --text-gray: #a0a0ab;
+      --text-light: #f4f4f8;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
     
-    header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); background: rgba(10,10,12,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 1000; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
+      background-color: rgba(10, 10, 12, 0.9); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 1000;
+    }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
-    .brand img { height: 34px; width: auto; }
+    .brand img { height: 34px; width: auto; object-fit: contain; }
     .nav-links { display: flex; gap: 1.75rem; align-items: center; }
-    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; }
-    .nav-links a:hover { color: #fff; }
+    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
     
-    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
     .btn-primary { background: var(--brand-accent); color: #fff; }
+    .btn-primary:hover { background: var(--brand-blue); }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background: var(--panel-bg); }
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 2000; }
     .modal-overlay.active { display: flex; }
     .auth-choice-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 420px; padding: 2rem; text-align: center; position: relative; }
     .choice-options { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
-    .choice-btn { padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--panel-bg); color: #fff; text-decoration: none; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+    .choice-btn { padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--panel-bg); color: #fff; text-decoration: none; font-weight: 600; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; }
     .choice-btn:hover { border-color: var(--brand-accent); background: rgba(15, 98, 254, 0.1); }
     .close-modal { position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; color: var(--text-gray); font-size: 1.25rem; cursor: pointer; }
 
@@ -34,65 +51,108 @@
     .hero { text-align: center; padding: 6rem 2rem 5rem; max-width: 1200px; margin: 0 auto; }
     .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.25rem; line-height: 1.15; }
     .hero p { color: var(--text-gray); font-size: 1.2rem; max-width: 720px; margin: 0 auto 2.5rem auto; }
-    
+    .hero-buttons { display: flex; gap: 1.25rem; justify-content: center; }
+
+    .section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+    .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
+    .card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+    .card p { color: var(--text-gray); line-height: 1.6; font-size: 0.95rem; }
+
     footer { border-top: 1px solid var(--border-color); padding: 2.5rem 2rem; text-align: center; color: var(--text-gray); font-size: 0.88rem; background: var(--panel-bg); margin-top: 4rem; }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="../home/" class="brand"><img src="../logo.png" alt="Logo"><span>Collab Design</span></a>
+    <a href="../home/" class="brand">
+      <img src="../logo.png" alt="Collab Design Logo">
+      <span>Collab Design</span>
+    </a>
+
     <nav class="nav-links">
+      <a href="../home/" class="active">Home</a>
       <a href="../products/">Products</a>
       <a href="../solutions/">Solutions</a>
       <a href="../resources/">Resources</a>
       <a href="../pricing/">Pricing</a>
     </nav>
-    <div id="nav-actions" style="display: flex; gap: 0.75rem; align-items: center;"></div>
+
+    <div class="user-nav" id="nav-actions"></div>
   </header>
 
   <main>
     <section class="hero">
       <h1>The Collaborative Vector Engine for Professional Teams</h1>
-      <p>Real-time multi-user vector editing, seamless asset inspection, and enterprise workspace controls.</p>
-      <div style="display: flex; gap: 1rem; justify-content: center;">
-        <button class="btn btn-primary" onclick="openRegisterModal()" style="padding: 0.8rem 2rem; font-size: 1rem;">Get Started</button>
-        <a href="../pricing/" class="btn btn-secondary" style="padding: 0.8rem 2rem; font-size: 1rem;">View Pricing</a>
+      <p>Collab provides real-time multi-user vector editing, seamless asset inspection, and enterprise workspace controls.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="openRegisterModal()" style="font-size: 1rem; padding: 0.8rem 2rem;">Get Started</button>
+        <a href="../pricing/" class="btn btn-secondary" style="font-size: 1rem; padding: 0.8rem 2rem;">View Pricing</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 style="text-align: center; font-size: 2.25rem; margin-bottom: 3rem;">Engineered for High-Performance Teams</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>⚡ Hardware Acceleration</h3>
+          <p>Render thousands of vector nodes effortlessly using WebGL and HTML5 Canvas technology.</p>
+        </div>
+        <div class="card">
+          <h3>🔒 Enterprise Governance</h3>
+          <p>Enforce domain verification, Gmail SMTP verification codes, and role-based access limits.</p>
+        </div>
+        <div class="card">
+          <h3>📂 Centralized Workspaces</h3>
+          <p>Seamlessly organize projects with visual preview thumbnails and automated session persistence.</p>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Registration Choice Modal -->
+  <!-- Register Choice Modal -->
   <div class="modal-overlay" id="register-modal">
     <div class="auth-choice-card">
       <button class="close-modal" onclick="closeRegisterModal()">✕</button>
-      <h3>Choose Registration Portal</h3>
-      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">Select your account type to begin setup</p>
+      <h3>Select Registration Type</h3>
+      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">Choose the account structure for your workspace</p>
       
       <div class="choice-options">
         <a href="../auth/organisation/register/" class="choice-btn">
-          <span>🏢 Organisation Workspace</span><span>→</span>
+          <span>🏢 Organisation Workspace</span>
+          <span>→</span>
         </a>
         <a href="../auth/personal/register/" class="choice-btn">
-          <span>👤 Personal Creator Account</span><span>→</span>
+          <span>👤 Personal Creator Account</span>
+          <span>→</span>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Login Modal -->
+  <!-- Login Choice Modal -->
   <div class="modal-overlay" id="login-modal">
     <div class="auth-choice-card">
       <button class="close-modal" onclick="closeLoginModal()">✕</button>
       <h3>Sign In to Collab</h3>
+      <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">Select your workspace login portal</p>
+      
       <div class="choice-options">
-        <a href="../auth/organisation/login/" class="choice-btn"><span>🏢 Organisation Login</span><span>→</span></a>
-        <a href="../auth/personal/login/" class="choice-btn"><span>👤 Personal Login</span><span>→</span></a>
+        <a href="../auth/organisation/login/" class="choice-btn">
+          <span>🏢 Organisation Login</span>
+          <span>→</span>
+        </a>
+        <a href="../auth/personal/login/" class="choice-btn">
+          <span>👤 Personal Login</span>
+          <span>→</span>
+        </a>
       </div>
     </div>
   </div>
 
-  <footer>© Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.</footer>
+  <footer>
+    © Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.
+  </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -100,8 +160,11 @@
       const nav = document.getElementById('nav-actions');
 
       if (session && session.isLoggedIn) {
+        const typeLabel = session.type === 'organisation' ? 'Organisation Account' : 'Personal Account';
         nav.innerHTML = `
-          <span style="font-size: 0.85rem; color: var(--text-gray); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${session.email}</span>
+          <span style="font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid var(--border-color);">
+            ${session.name || session.email.split('@')[0]} (${session.email}) [${typeLabel}]
+          </span>
           <a href="../dashboard/" class="btn btn-secondary">Dashboard</a>
           <a href="../settings/" class="btn btn-secondary">Settings</a>
           <button class="btn btn-secondary" onclick="logout()">Log Out</button>
