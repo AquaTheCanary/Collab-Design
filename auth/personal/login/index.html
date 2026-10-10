@@ -1,14 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personal Login | Collab Design</title>
-  
-  <!-- Points 3 levels up to root logo.png -->
   <link rel="icon" type="image/png" href="../../../logo.png">
   <link rel="shortcut icon" type="image/png" href="../../../logo.png">
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -21,7 +19,6 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    
     header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
@@ -29,21 +26,26 @@
     }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
     .brand img { height: 34px; width: auto; object-fit: contain; }
-    
     main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 400px; padding: 2.5rem; }
     .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
     .auth-card p { color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem; }
-    
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
     .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-
     .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
+    .google-btn {
+      width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600;
+      cursor: pointer; border: 1px solid #dadce0; background: #fff; color: #202124;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .google-btn:disabled { opacity: 0.65; cursor: wait; }
+    .status { margin: 12px 0 0 !important; font-size: 0.82rem !important; line-height: 1.5; overflow-wrap: anywhere; }
+    .divider { display: flex; align-items: center; gap: 12px; color: var(--text-gray); font-size: 0.8rem; margin: 18px 0; }
+    .divider::before, .divider::after { content: ""; height: 1px; background: var(--border-color); flex: 1; }
   </style>
 </head>
 <body>
-
   <header>
     <a href="../../../home/" class="brand">
       <img src="../../../logo.png" alt="Collab Design Logo">
@@ -68,19 +70,84 @@
         <button type="submit" class="btn">Sign In</button>
       </form>
 
+      <div class="divider">OR</div>
+
+      <button type="button" id="googleSignInButton" class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="">
+        Continue with Google
+      </button>
+      <p id="googleSignInStatus" class="status" role="status" aria-live="polite"></p>
+
       <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-gray);">
-        Don't have an account? <a href="../register/" style="color: var(--brand-accent); text-decoration: none;">Register here</a>
+        Don't have an account?
+        <a href="../register/" style="color: var(--brand-accent); text-decoration: none;">Register here</a>
       </div>
     </div>
   </main>
 
   <script>
+    // Existing email/password demo login. This does not verify the password.
     document.getElementById('personal-login').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const session = { isLoggedIn: true, email: email, type: 'personal' };
+      const email = document.getElementById('email').value.trim();
+      const session = { isLoggedIn: true, email, type: 'personal' };
       localStorage.setItem('collab_user_session', JSON.stringify(session));
       window.location.href = '../../../home/';
+    });
+  </script>
+
+  <script type="module">
+    import { initializeApp, getApps, getApp } from
+      "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIguTaQ3pNBH93bSNGr7ByqLdGHuoGPNI",
+      authDomain: "collab-design-sso.firebaseapp.com",
+      projectId: "collab-design-sso",
+      storageBucket: "collab-design-sso.firebasestorage.app",
+      messagingSenderId: "191158941905",
+      appId: "1:191158941905:web:95eab0f489c32e6880edf0",
+      measurementId: "G-PVGGL49FQE"
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    const button = document.getElementById("googleSignInButton");
+    const status = document.getElementById("googleSignInStatus");
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "Signing in with Google...";
+
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        const session = {
+          isLoggedIn: true,
+          uid: user.uid,
+          name: user.displayName || "",
+          email: user.email || "",
+          photoURL: user.photoURL || "",
+          type: "personal",
+          authProvider: "google"
+        };
+
+        localStorage.setItem("collab_user_session", JSON.stringify(session));
+        window.location.href = "../../../home/";
+      } catch (error) {
+        console.error("Google sign-in error:", error);
+        status.textContent = "Google sign-in failed: " +
+          (error.code || error.message || "Unknown error");
+      } finally {
+        button.disabled = false;
+      }
     });
   </script>
 </body>
