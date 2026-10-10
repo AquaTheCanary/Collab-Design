@@ -7,208 +7,105 @@
   <link rel="icon" type="image/png" href="../../../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-black: #0a0a0c;
-      --panel-bg: #141418;
-      --border-color: #2a2a32;
-      --brand-accent: #0f62fe;
-      --text-gray: #a0a0ab;
-      --text-light: #f4f4f8;
-      --danger-red: #da1e28;
-    }
+    :root { --bg-black: #0a0a0c; --panel-bg: #141418; --border-color: #2a2a32; --brand-accent: #0f62fe; --text-gray: #a0a0ab; --text-light: #f4f4f8; --danger-red: #da1e28; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    
     header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
     .brand img { height: 34px; width: auto; }
-    
     main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 480px; padding: 2.5rem; }
-    .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
-    
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
     .form-group input, .form-group select { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-
     .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
     .btn-secondary { background: transparent; border: 1px solid var(--border-color); color: #fff; }
     .error-msg { color: var(--danger-red); font-size: 0.82rem; margin-top: 0.4rem; display: none; }
-    .step-box { display: none; }
-    .step-box.active { display: block; }
-
+    .step-box { display: none; } .step-box.active { display: block; }
     footer { border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-gray); font-size: 0.85rem; }
   </style>
 </head>
 <body>
-
-  <header>
-    <a href="../../../home/" class="brand">
-      <img src="../../../logo.png" alt="Collab Design Logo">
-      <span>Collab Design</span>
-    </a>
-  </header>
-
+  <header><a href="../../../home/" class="brand"><img src="../../../logo.png"><span>Collab Design</span></a></header>
   <main>
     <div class="auth-card">
-      <!-- STEP 1: Company Profile -->
       <div id="step-1" class="step-box active">
         <h2>Enterprise Workspace Setup</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 1 of 4: Organisation Profile</p>
-        
         <form onsubmit="handleStep1(event)">
-          <div class="form-group">
-            <label>Admin Full Name</label>
-            <input type="text" id="admin-name" required placeholder="Sarah Jenkins">
-          </div>
-          <div class="form-group">
-            <label>Organisation Legal Name</label>
-            <input type="text" id="org-name" required placeholder="Acme Global Inc.">
-          </div>
+          <div class="form-group"><label>Admin Full Name</label><input type="text" id="admin-name" required placeholder="Sarah Jenkins"></div>
+          <div class="form-group"><label>Organisation Legal Name</label><input type="text" id="org-name" required placeholder="Acme Global Inc."></div>
           <div class="form-group">
             <label>Work Email Address</label>
             <input type="email" id="work-email" required placeholder="admin@acme.com">
-            <div class="error-msg" id="email-error">Public email domains (gmail, outlook, yahoo, etc.) are restricted.</div>
+            <div class="error-msg" id="email-error">You must use a work email to register an organisation. Personal email domains (gmail.com, outlook.com, hotmail.com, yahoo.com etc.) are not allowed.</div>
           </div>
           <button type="submit" class="btn">Continue to Team Scale →</button>
         </form>
       </div>
 
-      <!-- STEP 2: Team Scale & Roles -->
       <div id="step-2" class="step-box">
         <h2>Team Size & Security</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 2 of 4: Workspace Governance</p>
-        
         <form onsubmit="handleStep2(event)">
-          <div class="form-group">
-            <label>Estimated Active Designers</label>
-            <select id="team-size">
-              <option value="5">1 - 5 Seats</option>
-              <option value="20">6 - 20 Seats</option>
-              <option value="50">21 - 50 Seats</option>
-              <option value="100">50+ Enterprise Seats</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Enforce SSO Authentication</label>
-            <select id="sso-pref">
-              <option value="saml">SAML / Okta / Azure AD</option>
-              <option value="google">Google Workspace SSO</option>
-              <option value="standard">Standard Password Only</option>
-            </select>
-          </div>
-          <div style="display: flex; gap: 0.75rem;">
-            <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
-            <button type="submit" class="btn">Send Verification Code →</button>
-          </div>
+          <div class="form-group"><label>Active Designers</label><select id="team-size"><option value="5">1 - 5 Seats</option><option value="20">6 - 20 Seats</option><option value="50">21 - 50 Seats</option></select></div>
+          <div class="form-group"><label>SSO Provider</label><select id="sso-pref"><option value="saml">SAML / Okta / Azure AD</option><option value="google">Google Workspace SSO</option></select></div>
+          <div style="display: flex; gap: 0.75rem;"><button type="button" class="btn btn-secondary" onclick="goToStep(1)">← Back</button><button type="submit" class="btn">Send Verification Code →</button></div>
         </form>
       </div>
 
-      <!-- STEP 3: Vercel Gmail SMTP Verification -->
       <div id="step-3" class="step-box">
         <h2>Email Verification</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 3 of 4: Enter 6-digit code sent via SMTP</p>
-        
-        <div class="form-group">
-          <label>Verification Code</label>
-          <input type="text" id="otp-input" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.2em;">
-        </div>
+        <div class="form-group"><label>Verification Code</label><input type="text" id="otp-input" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.2em;"></div>
         <button type="button" class="btn" onclick="verifyOTP()">Verify Code →</button>
       </div>
 
-      <!-- STEP 4: Plan Tier Selection -->
       <div id="step-4" class="step-box">
         <h2>Select Licensing Tier</h2>
-        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 4 of 4: Choose your billing plan</p>
-        
+        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 4 of 4: Choose billing plan</p>
         <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <button class="btn" onclick="finalizeOrgRegistration('Organisation Pro ($29/seat/mo)')">Upgrade to Organisation Pro ($29/mo)</button>
-          <button class="btn btn-secondary" onclick="finalizeOrgRegistration('Organisation Free Tier')">Stick to Organisation Free Tier</button>
+          <button class="btn" onclick="finalizeOrg('Organisation Pro ($29/seat/mo)')">Upgrade to Organisation Pro ($29/mo)</button>
+          <button class="btn btn-secondary" onclick="finalizeOrg('Organisation Free Tier')">Stick to Organisation Free Tier</button>
         </div>
       </div>
     </div>
   </main>
-
-  <footer>
-    © Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.
-  </footer>
-
+  <footer>© Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.</footer>
   <script>
-    const restrictedDomains = ['gmail.com', 'outlook.com', 'yahoo.com', 'gmx.com', 'hotmail.com', 'icloud.com'];
-    let formData = { name: '', org: '', email: '', size: '', sso: '' };
-    let generatedOTP = '';
-
-    function goToStep(stepNum) {
-      document.querySelectorAll('.step-box').forEach(b => b.classList.remove('active'));
-      document.getElementById(`step-${stepNum}`).classList.add('active');
-    }
-
-    async function handleStep1(e) {
+    const restricted = ['gmail.com', 'outlook.com', 'yahoo.com', 'gmx.com', 'hotmail.com', 'icloud.com'];
+    let fData = { name: '', org: '', email: '' }, generatedOTP = '';
+    function goToStep(n) { document.querySelectorAll('.step-box').forEach(b => b.classList.remove('active')); document.getElementById(`step-${n}`).classList.add('active'); }
+    function handleStep1(e) {
       e.preventDefault();
       const email = document.getElementById('work-email').value.toLowerCase().trim();
       const domain = email.split('@')[1];
-      const errorDiv = document.getElementById('email-error');
-
-      if (!domain || restrictedDomains.includes(domain) || !/\.[a-z]{2,}$/i.test(domain)) {
-        errorDiv.style.display = 'block';
-        return;
+      if (!domain || restricted.includes(domain) || !/\.[a-z]{2,}$/i.test(domain)) {
+        document.getElementById('email-error').style.display = 'block'; return;
       }
-      errorDiv.style.display = 'none';
-
-      formData.name = document.getElementById('admin-name').value.trim();
-      formData.org = document.getElementById('org-name').value.trim();
-      formData.email = email;
-      goToStep(2);
+      document.getElementById('email-error').style.display = 'none';
+      fData.name = document.getElementById('admin-name').value.trim();
+      fData.org = document.getElementById('org-name').value.trim();
+      fData.email = email; goToStep(2);
     }
-
     async function handleStep2(e) {
       e.preventDefault();
-      formData.size = document.getElementById('team-size').value;
-      formData.sso = document.getElementById('sso-pref').value;
-
       generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-
-      try {
-        await fetch('/api/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email, code: generatedOTP })
-        });
-      } catch (err) {
-        console.warn('SMTP fallback demo code:', generatedOTP);
-      }
-      
-      alert(`[Demo Mode] Verification OTP sent: ${generatedOTP}`);
-      goToStep(3);
+      try { await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: fData.email, code: generatedOTP }) }); } catch(err){}
+      alert(`[Demo Mode] OTP: ${generatedOTP}`); goToStep(3);
     }
-
     function verifyOTP() {
-      const code = document.getElementById('otp-input').value.trim();
-      if (code === generatedOTP) {
-        goToStep(4);
-      } else {
-        alert('Invalid verification code.');
-      }
+      if (document.getElementById('otp-input').value.trim() === generatedOTP) goToStep(4);
+      else alert('Invalid OTP code.');
     }
-
-    function finalizeOrgRegistration(plan) {
-      const session = {
-        isLoggedIn: true,
-        name: formData.name,
-        email: formData.email,
-        orgName: formData.org,
-        type: 'organisation',
-        plan: plan
-      };
-
-      // Save user record to persistent store for strict login checks
+    function finalizeOrg(plan) {
+      const session = { isLoggedIn: true, name: fData.name, email: fData.email, orgName: fData.org, type: 'organisation', plan };
       let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
-      db.push(session);
-      localStorage.setItem('collab_registered_users', JSON.stringify(db));
+      db.push(session); localStorage.setItem('collab_registered_users', JSON.stringify(db));
       localStorage.setItem('collab_user_session', JSON.stringify(session));
-
       window.location.href = '../../../dashboard/';
     }
   </script>
 </body>
 </html>
+      
