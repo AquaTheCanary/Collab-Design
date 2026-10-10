@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,29 +18,33 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    
     header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
     .brand img { height: 34px; width: auto; }
-    
     main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 440px; padding: 2.5rem; }
     .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
-    
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
     .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-
     .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
     .btn-secondary { background: transparent; border: 1px solid var(--border-color); color: #fff; }
     .step-box { display: none; }
     .step-box.active { display: block; }
-
+    .google-btn {
+      width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600;
+      cursor: pointer; border: 1px solid #dadce0; background: #fff; color: #202124;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 14px;
+    }
+    .google-btn:disabled { opacity: 0.65; cursor: wait; }
+    .status { color: var(--text-gray); font-size: 0.82rem; margin-top: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+    .divider { display: flex; align-items: center; gap: 12px; color: var(--text-gray); font-size: 0.8rem; margin: 18px 0 4px; }
+    .divider::before, .divider::after { content: ""; height: 1px; background: var(--border-color); flex: 1; }
     footer { border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-gray); font-size: 0.85rem; }
   </style>
 </head>
 <body>
-
   <header>
     <a href="../../../home/" class="brand">
       <img src="../../../logo.png" alt="Collab Design Logo">
@@ -49,44 +54,46 @@
 
   <main>
     <div class="auth-card">
-      <!-- Step 1: Personal Info -->
       <div id="step-1" class="step-box active">
         <h2>Create Personal Account</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 1 of 3: Profile Setup</p>
 
         <form onsubmit="handlePersonalStep1(event)">
           <div class="form-group">
-            <label>Full Name</label>
+            <label for="user-name">Full Name</label>
             <input type="text" id="user-name" required placeholder="Alex Creator">
           </div>
           <div class="form-group">
-            <label>Email Address</label>
+            <label for="user-email">Email Address</label>
             <input type="email" id="user-email" required placeholder="you@example.com">
           </div>
           <button type="submit" class="btn" id="sub-btn">Send Verification Code →</button>
         </form>
+
+        <div class="divider">OR</div>
+        <button type="button" class="google-btn" id="googleRegisterButton">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="">
+          Sign up with Google
+        </button>
+        <p id="googleRegisterStatus" class="status" role="status" aria-live="polite"></p>
       </div>
 
-      <!-- Step 2: OTP Verification -->
       <div id="step-2" class="step-box">
         <h2>Verify Your Email</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 2 of 3: Enter 6-digit code via SMTP</p>
-
         <div class="form-group">
-          <label>Verification Code</label>
-          <input type="text" id="otp-input" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.2em;">
+          <label for="otp-input">Verification Code</label>
+          <input type="text" id="otp-input" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.2em;">
         </div>
         <button type="button" class="btn" onclick="verifyPersonalOTP()">Verify Code →</button>
       </div>
 
-      <!-- Step 3: Tier Selection -->
       <div id="step-3" class="step-box">
         <h2>Choose Creator Tier</h2>
         <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 3 of 3: Select Plan</p>
-
         <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <button class="btn" onclick="finalizePersonal('Personal Pro ($12/mo)')">Upgrade to Personal Pro ($12/mo)</button>
-          <button class="btn btn-secondary" onclick="finalizePersonal('Free Tier')">Stick to Personal Free Tier</button>
+          <button type="button" class="btn" onclick="finalizePersonal('Personal Pro ($12/mo)')">Upgrade to Personal Pro ($12/mo)</button>
+          <button type="button" class="btn btn-secondary" onclick="finalizePersonal('Free Tier')">Stick to Personal Free Tier</button>
         </div>
       </div>
     </div>
@@ -98,12 +105,32 @@
 
   <script>
     let pName = '', pEmail = '', generatedOTP = '';
+    let pFirebaseUid = '', pAuthProvider = 'email', pPhotoURL = '';
+
+    // Called by the Firebase module after Google authentication succeeds.
+    window.startGooglePersonalRegistration = function(name, email, uid, photoURL) {
+      pName = name || '';
+      pEmail = email || '';
+      pFirebaseUid = uid || '';
+      pAuthProvider = 'google';
+      pPhotoURL = photoURL || '';
+
+      document.getElementById('user-name').value = pName;
+      document.getElementById('user-email').value = pEmail;
+
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-2').classList.remove('active');
+      document.getElementById('step-3').classList.add('active');
+    };
 
     async function handlePersonalStep1(e) {
       e.preventDefault();
       pName = document.getElementById('user-name').value.trim();
       pEmail = document.getElementById('user-email').value.trim();
-      
+      pFirebaseUid = '';
+      pAuthProvider = 'email';
+      pPhotoURL = '';
+
       generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
       try {
@@ -113,7 +140,7 @@
           body: JSON.stringify({ email: pEmail, code: generatedOTP })
         });
       } catch (err) {
-        console.warn('Demo OTP code:', generatedOTP);
+        console.warn('OTP request failed. Demo OTP code:', generatedOTP);
       }
 
       alert(`[Demo Mode] Verification code: ${generatedOTP}`);
@@ -123,7 +150,7 @@
 
     function verifyPersonalOTP() {
       const code = document.getElementById('otp-input').value.trim();
-      if (code === generatedOTP) {
+      if (code === generatedOTP && generatedOTP !== '') {
         document.getElementById('step-2').classList.remove('active');
         document.getElementById('step-3').classList.add('active');
       } else {
@@ -132,13 +159,94 @@
     }
 
     function finalizePersonal(plan) {
-      const session = { isLoggedIn: true, name: pName, email: pEmail, type: 'personal', plan: plan };
-      let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
-      db.push(session);
+      const session = {
+        isLoggedIn: true,
+        uid: pFirebaseUid || undefined,
+        name: pName,
+        email: pEmail,
+        photoURL: pPhotoURL || undefined,
+        type: 'personal',
+        plan: plan,
+        authProvider: pAuthProvider
+      };
+
+      let db;
+      try {
+        db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+        if (!Array.isArray(db)) db = [];
+      } catch (error) {
+        db = [];
+      }
+
+      // Avoid adding a duplicate Google profile every time it signs up again.
+      const existingIndex = pFirebaseUid
+        ? db.findIndex(user => user.uid === pFirebaseUid)
+        : -1;
+
+      if (existingIndex >= 0) {
+        db[existingIndex] = { ...db[existingIndex], ...session };
+      } else {
+        db.push(session);
+      }
+
       localStorage.setItem('collab_registered_users', JSON.stringify(db));
       localStorage.setItem('collab_user_session', JSON.stringify(session));
       window.location.href = '../../../dashboard/';
     }
   </script>
+
+  <script type="module">
+    import { initializeApp, getApps, getApp } from
+      "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIguTaQ3pNBH93bSNGr7ByqLdGHuoGPNI",
+      authDomain: "collab-design-sso.firebaseapp.com",
+      projectId: "collab-design-sso",
+      storageBucket: "collab-design-sso.firebasestorage.app",
+      messagingSenderId: "191158941905",
+      appId: "1:191158941905:web:95eab0f489c32e6880edf0",
+      measurementId: "G-PVGGL49FQE"
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    const button = document.getElementById("googleRegisterButton");
+    const status = document.getElementById("googleRegisterStatus");
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "Connecting to Google...";
+
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        if (!user.email) {
+          throw new Error("Your Google account did not provide an email address.");
+        }
+
+        window.startGooglePersonalRegistration(
+          user.displayName || "",
+          user.email,
+          user.uid,
+          user.photoURL || ""
+        );
+      } catch (error) {
+        console.error("Google registration error:", error);
+        status.textContent = "Google sign-up failed: " +
+          (error.code || error.message || "Unknown error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
+
