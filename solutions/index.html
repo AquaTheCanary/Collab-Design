@@ -3,225 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plans & Pricing | Collab Design</title>
+  <title>Solutions | Collab Design</title>
   <link rel="icon" type="image/png" href="../logo.png">
-  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-black: #0a0a0c;
-      --panel-bg: #141418;
-      --card-bg: #1a1a20;
-      --border-color: #2a2a32;
-      --brand-blue: #428be5;
-      --brand-accent: #0f62fe;
-      --text-gray: #a0a0ab;
-      --text-light: #f4f4f8;
-    }
+    :root { --bg-black: #0a0a0c; --panel-bg: #141418; --card-bg: #1a1a20; --border-color: #2a2a32; --brand-accent: #0f62fe; --text-gray: #a0a0ab; --text-light: #f4f4f8; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
-      background-color: rgba(10, 10, 12, 0.9); backdrop-filter: blur(12px);
-      position: sticky; top: 0; z-index: 1000;
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); background: rgba(10,10,12,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 1000; }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
-    .brand img { height: 34px; width: auto; object-fit: contain; }
+    .brand img { height: 34px; width: auto; }
     .nav-links { display: flex; gap: 1.75rem; align-items: center; }
-    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; }
     .nav-links a:hover, .nav-links a.active { color: #fff; }
-    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
-    
-    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
-    .btn-primary { background: var(--brand-accent); color: #fff; }
-    .btn-primary:hover { background: var(--brand-blue); }
+    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
-    
-    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 3.5rem 2rem; }
-    .pricing-header { text-align: center; margin-bottom: 3.5rem; }
-    .pricing-header h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 0.75rem; }
-    .pricing-header p { color: var(--text-gray); font-size: 1.05rem; }
-    
-    .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 5rem; }
-    .price-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; display: flex; flex-direction: column; justify-content: space-between; }
-    .price-card.featured { border-color: var(--brand-accent); background: linear-gradient(180deg, rgba(15,98,254,0.08) 0%, var(--panel-bg) 100%); }
-    .price-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .price-amount { font-size: 2.5rem; font-weight: 800; margin: 1rem 0; }
-    .price-amount span { font-size: 0.9rem; color: var(--text-gray); font-weight: 400; }
-
-    /* Comprehensive Comparison Feature Table */
-    .table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
-    .matrix-title { padding: 1.75rem 2rem; font-size: 1.35rem; font-weight: 700; border-bottom: 1px solid var(--border-color); background: #101014; }
-    
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem; }
-    th, td { padding: 1.15rem 2rem; border-bottom: 1px solid var(--border-color); }
-    th { font-weight: 700; background: rgba(255,255,255,0.02); }
-    td:not(:first-child), th:not(:first-child) { text-align: center; width: 220px; }
-    tr:last-child td { border-bottom: none; }
-    
-    .check { color: var(--brand-accent); font-weight: 800; }
-    .cross { color: var(--text-gray); opacity: 0.4; }
-
-    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 4rem 2rem; }
+    .hero { text-align: center; margin-bottom: 5rem; }
+    .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
+    .hero p { color: var(--text-gray); font-size: 1.15rem; max-width: 700px; margin: 0 auto; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
+    .card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+    .card p { color: var(--text-gray); line-height: 1.6; font-size: 0.95rem; }
+    footer { border-top: 1px solid var(--border-color); padding: 2.5rem 2rem; text-align: center; color: var(--text-gray); font-size: 0.88rem; background: var(--panel-bg); }
   </style>
 </head>
 <body>
-
   <header>
-    <a href="../home/" class="brand">
-      <img src="../logo.png" alt="Collab Design Logo">
-      <span>Collab Design</span>
-    </a>
-
+    <a href="../home/" class="brand"><img src="../logo.png" alt="Logo"><span>Collab Design</span></a>
     <nav class="nav-links">
       <a href="../home/">Home</a>
       <a href="../products/">Products</a>
-      <a href="../solutions/">Solutions</a>
+      <a href="../solutions/" class="active">Solutions</a>
       <a href="../resources/">Resources</a>
-      <a href="../pricing/" class="active">Pricing</a>
+      <a href="../pricing/">Pricing</a>
     </nav>
-
-    <div class="user-nav" id="nav-actions"></div>
+    <div id="nav-actions" style="display: flex; gap: 0.75rem; align-items: center;"></div>
   </header>
 
   <main>
-    <div class="pricing-header">
-      <h1>Plans and Pricing</h1>
-      <p>Upgrade your workflow with a paid plan</p>
-       <p>or, stick to the free plan, with limited features.</p>
+    <div class="hero">
+      <h1>Tailored Solutions for Every Team</h1>
+      <p>Discover how engineering departments, design agencies, and remote creators scale their output using Collab.</p>
     </div>
 
-    <div class="pricing-cards">
-      <div class="price-card">
-        <div>
-          <div class="price-title">Free Plan</div>
-          <p style="color: var(--text-gray); font-size: 0.9rem;">For those who want a simple collaberative solution</p>
-          <div class="price-amount">£0 <span>forever</span></div>
-        </div>
-        <a href="../personal/register/" class="btn btn-secondary" style="width: 100%;">Create free account</a>
+    <div class="grid-3">
+      <div class="card">
+        <h3>🏢 For Enterprises</h3>
+        <p>Advanced security controls, SAML single sign-on (SSO), domain verification, and dedicated customer success management.</p>
       </div>
-
-      <div class="price-card">
-        <div>
-          <div class="price-title">Teams</div>
-          <p style="color: var(--text-gray); font-size: 0.9rem;">For small teams looking to scale</p>
-          <div class="price-amount">£5 <span>/month</span></div>
-        </div>
-        <a href="../teams/register/" class="btn btn-primary" style="width: 100%;">Choose Teams Plan</a>
+      <div class="card">
+        <h3>🚀 For Product Agencies</h3>
+        <p>Infinite canvas workspaces, rapid client feedback loops, and automated design token exports into production code.</p>
       </div>
-        
-      <div class="price-card featured">
-          <div>
-          <div class="price-title">Organisation</div>
-          <p style="color: var(--text-gray); font-size: 0.9rem;">For offices and large estabished teams who want a highly functional workspace</p>
-          <div class="price-amount">£12 <span>/seat/month</span></div>
-        </div>
-        <a href="../organisation/register/" class="btn btn-primary" style="width: 100%;">Register Organisation</a>
+      <div class="card">
+        <h3>⚡ For Independent Creators</h3>
+        <p>Lightning-fast vector tools, personal cloud project backups, and cross-device synchronization.</p>
       </div>
-
-      <div class="price-card">
-          <div>
-          <div class="price-title">Enterprise</div>
-          <p style="color: var(--text-gray); font-size: 0.9rem;">For entire companies and brands who are looking for a secure platform
-          <div class="price-amount">£19 <span>/seat/month</span></div>
-        </div>
-        <a href="../contact/sales" class="btn btn-primary" style="width: 100%;">Contact Sales</a>
-      </div>
-    </div>
-
-    <!-- Big Feature Comparison Table -->
-    <div class="table-container">
-      <div class="matrix-title">Features Comparison</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Features</th>
-            <th>Free</th>
-            <th>Teams</th>
-            <th>Organisation</th>
-            <th>Enterprise</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Vector Studio Editor Access</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>Real-time Concurrency Cursors</td>
-            <td><span class="cross">—</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>Shared Workspace Projects</td>
-            <td>3 Projects</td>
-            <td>5 Projects</td>
-            <td><span class="check">Unlimited</span></td>
-            <td><span class="check">Custom</span></td>
-          </tr>
-          <tr>
-            <td>Cloud Storage Space</td>
-            <td>100 MB (0.1 GB) Storage</td>
-            <td>100 GB Storage</td>
-            <td>1 TB Storage</td>
-            <td>Custom</td>
-          </tr>
-          <tr>
-            <td>CSS & Token Code Exporter</td>
-            <td>Basic CSS</td>
-            <td>Advanced CSS</td>
-            <td><span class="check">Full Design Tokens (JSON)</span></td>
-            <td><span class="check">Full Design Tokens (JSON/SCSS)</span></td>
-          </tr>
-          <tr>
-            <td>Enterprise Single Sign-On (SSO)</td>
-            <td><span class="cross">—</span></td>
-            <td><span class="cross">—</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>Role-Based Admin Permissions</td>
-            <td><span class="cross">—</span></td>
-            <td><span class="cross">—</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </main>
+
+  <footer>© Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.</footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const session = JSON.parse(localStorage.getItem('collab_user_session'));
-      const navActions = document.getElementById('nav-actions');
-
+      const nav = document.getElementById('nav-actions');
       if (session && session.isLoggedIn) {
-        navActions.innerHTML = `
-          <span class="user-pill">${session.email}</span>
+        const typeLabel = session.type === 'organisation' ? 'Organisation Account' : 'Personal Account';
+        nav.innerHTML = `
+          <span style="font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid var(--border-color);">
+            ${session.name || session.email.split('@')[0]} (${session.email}) [${typeLabel}]
+          </span>
           <a href="../settings/" class="btn btn-secondary">Settings</a>
-          <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+          <button class="btn btn-secondary" onclick="localStorage.removeItem('collab_user_session'); window.location.reload();">Log Out</button>
         `;
       } else {
-        navActions.innerHTML = `
-          <a href="../organisation/login/" class="btn btn-secondary">Org Login</a>
-          <a href="../personal/login/" class="btn btn-secondary">Personal Login</a>
+        nav.innerHTML = `
+          <a href="../auth/organisation/login/" class="btn btn-secondary">Org Login</a>
+          <a href="../auth/personal/login/" class="btn btn-secondary">Personal Login</a>
         `;
       }
     });
-
-    function logout() {
-      localStorage.removeItem('collab_user_session');
-      window.location.reload();
-    }
   </script>
 </body>
 </html>
