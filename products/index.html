@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products | Collab Design</title>
   <link rel="icon" type="image/png" href="../logo.png">
-  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -32,24 +31,70 @@
     .nav-links { display: flex; gap: 1.75rem; align-items: center; }
     .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover, .nav-links a.active { color: #fff; }
-    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
     
-    .btn { padding: 0.55rem 1.15rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
     .btn-primary { background: var(--brand-accent); color: #fff; }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
-    
-    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 3.5rem 2rem; }
-    .hero { text-align: center; margin-bottom: 4rem; }
+
+    .user-dropdown-container { position: relative; display: inline-block; }
+    .user-pill-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dropdown-card {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 125%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 280px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+      z-index: 2500;
+      padding: 1.25rem;
+      text-align: left;
+    }
+    .dropdown-card.active { display: block; }
+    .dropdown-header { padding-bottom: 0.85rem; margin-bottom: 0.85rem; border-bottom: 1px solid var(--border-color); }
+    .dropdown-header strong { display: block; color: #fff; font-size: 1rem; font-weight: 700; }
+    .dropdown-header .user-email { display: block; color: var(--text-gray); font-size: 0.82rem; margin-top: 0.15rem; word-break: break-all; }
+    .dropdown-header .account-badge { display: inline-block; margin-top: 0.5rem; color: var(--brand-accent); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+    .dropdown-actions { display: flex; flex-direction: column; gap: 0.4rem; }
+    .dropdown-actions a, .dropdown-actions button {
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 0.88rem;
+      background: transparent;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+    }
+    .dropdown-actions a:hover, .dropdown-actions button:hover { background: rgba(255,255,255,0.06); }
+
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 4rem 2rem; }
+    .hero { text-align: center; margin-bottom: 4.5rem; }
     .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem; }
-    .hero p { color: var(--text-gray); font-size: 1.1rem; max-width: 650px; margin: 0 auto; }
+    .hero p { color: var(--text-gray); font-size: 1.1rem; max-width: 680px; margin: 0 auto; line-height: 1.6; }
     
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; }
-    .product-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; transition: border 0.2s; }
-    .product-card:hover { border-color: var(--brand-accent); }
-    .product-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem; color: #fff; }
-    .product-card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
-    
-    .user-pill { font-size: 0.85rem; color: var(--text-gray); padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid var(--border-color); }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; }
+    .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.5rem; }
+    .card h3 { font-size: 1.35rem; margin-bottom: 0.75rem; }
+    .card p { color: var(--text-gray); line-height: 1.6; font-size: 0.95rem; margin-bottom: 1.75rem; }
+
+    footer { border-top: 1px solid var(--border-color); padding: 2.5rem 2rem; text-align: center; color: var(--text-gray); font-size: 0.88rem; background: var(--panel-bg); margin-top: 4rem; }
   </style>
 </head>
 <body>
@@ -66,7 +111,6 @@
       <a href="../solutions/">Solutions</a>
       <a href="../resources/">Resources</a>
       <a href="../pricing/">Pricing</a>
-      <a href="../editor/">Editor</a>
     </nav>
 
     <div class="user-nav" id="nav-actions"></div>
@@ -74,30 +118,35 @@
 
   <main>
     <div class="hero">
-      <h1>Built for Modern Design Teams</h1>
-      <p>Discover our suite of high-performance tools engineered for vector graphics, UI prototyping, and design system management.</p>
+      <h1>The Collab Product Suite</h1>
+      <p>Purpose-built software for vector editing, multiplayer design synchronization, and secure enterprise asset management.</p>
     </div>
 
-    <div class="products-grid">
-      <div class="product-card">
-        <h3>Vector Canvas Studio</h3>
-        <p>A GPU-accelerated design canvas capable of rendering millions of vector nodes in real time without lag.</p>
-        <a href="../editor/" class="btn btn-primary">Launch Studio Editor</a>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🎨 Vector Studio Canvas</h3>
+        <p>A hardware-accelerated canvas engine supporting live shape creation, custom line and text annotations, path inspection, and instant PNG exports.</p>
+        <a href="../editor/" class="btn btn-primary">Launch Studio Engine</a>
       </div>
-
-      <div class="product-card">
-        <h3>Real-Time Collaborative Engine</h3>
-        <p>Collaborate live with multiple cursors, synchronized state management, and real-time commentary directly on screen.</p>
-        <a href="../organisation/register/" class="btn btn-secondary">Try Team Collaboration</a>
+      <div class="card">
+        <h3>📂 Workspace Dashboard</h3>
+        <p>Centralized hub for managing team files, viewing live canvas render thumbnails, tracking collaborator changes, and switching projects instantly.</p>
+        <a href="../dashboard/" class="btn btn-secondary">Open Dashboard</a>
       </div>
-
-      <div class="product-card">
-        <h3>Design System Inspector</h3>
-        <p>Automatically extract CSS tokens, color variables, typography scales, and production-ready SVG graphics.</p>
-        <a href="../resources/" class="btn btn-secondary">Read Docs</a>
+      <div class="card">
+        <h3>🔒 Enterprise Auth Gateway</h3>
+        <p>Secure authentication supporting strict work-email domain validation, Gmail SMTP verification code delivery via Vercel serverless functions, and SSO integrations.</p>
+      </div>
+      <div class="card">
+        <h3>⚙️ Design Tokens & Exporter</h3>
+        <p>Export vector specifications directly into production-ready CSS, SCSS, or JSON variables for seamless developer handoff.</p>
       </div>
     </div>
   </main>
+
+  <footer>
+    © Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.
+  </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -105,23 +154,40 @@
       const navActions = document.getElementById('nav-actions');
 
       if (session && session.isLoggedIn) {
+        const userName = session.name || session.email.split('@')[0];
+        const accountType = session.type === 'organisation' ? 'Organisation Account' : 'Personal Account';
+
         navActions.innerHTML = `
-          <span class="user-pill">${session.email}</span>
-          <a href="../settings/" class="btn btn-secondary">Settings</a>
-          <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+          <div class="user-dropdown-container">
+            <button class="user-pill-btn" onclick="toggleUserDropdown(event)">
+              <span>${userName}</span>
+              <span style="font-size: 0.75rem; opacity: 0.7;">▼</span>
+            </button>
+            <div class="dropdown-card" id="user-popover">
+              <div class="dropdown-header">
+                <strong>${userName}</strong>
+                <span class="user-email">${session.email}</span>
+                <span class="account-badge">[${accountType}]</span>
+              </div>
+              <div class="dropdown-actions">
+                <a href="../dashboard/">📂 Workspace Dashboard</a>
+                <a href="../settings/">⚙️ Account Settings</a>
+                <button onclick="logoutUser()">🚪 Log Out</button>
+              </div>
+            </div>
+          </div>
         `;
       } else {
         navActions.innerHTML = `
-          <a href="../organisation/login/" class="btn btn-secondary">Org Login</a>
-          <a href="../personal/login/" class="btn btn-secondary">Personal Login</a>
+          <a href="../auth/organisation/login/" class="btn btn-secondary">Org Login</a>
+          <a href="../auth/personal/login/" class="btn btn-secondary">Personal Login</a>
         `;
       }
     });
 
-    function logout() {
-      localStorage.removeItem('collab_user_session');
-      window.location.reload();
-    }
+    function toggleUserDropdown(e) { e.stopPropagation(); document.getElementById('user-popover').classList.toggle('active'); }
+    window.onclick = () => document.getElementById('user-popover')?.classList.remove('active');
+    function logoutUser() { localStorage.removeItem('collab_user_session'); window.location.reload(); }
   </script>
 </body>
 </html>
