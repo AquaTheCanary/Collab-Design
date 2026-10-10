@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resources | Collab Design</title>
+  <title>Plans & Pricing | Collab Design</title>
   <link rel="icon" type="image/png" href="../logo.png">
+  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,6 +13,7 @@
       --panel-bg: #141418;
       --card-bg: #1a1a20;
       --border-color: #2a2a32;
+      --brand-blue: #428be5;
       --brand-accent: #0f62fe;
       --text-gray: #a0a0ab;
       --text-light: #f4f4f8;
@@ -30,9 +32,36 @@
     .nav-links { display: flex; gap: 1.75rem; align-items: center; }
     .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .user-nav { display: flex; align-items: center; gap: 0.85rem; }
     
-    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; }
+    .btn { padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--brand-accent); color: #fff; }
+    .btn-primary:hover { background: var(--brand-blue); }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+    
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 3.5rem 2rem; }
+    .pricing-header { text-align: center; margin-bottom: 3.5rem; }
+    .pricing-header h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .pricing-header p { color: var(--text-gray); font-size: 1.05rem; }
+    
+    .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.75rem; margin-bottom: 5rem; }
+    .price-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .price-card.featured { border-color: var(--brand-accent); background: linear-gradient(180deg, rgba(15,98,254,0.08) 0%, var(--panel-bg) 100%); }
+    .price-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .price-amount { font-size: 2.25rem; font-weight: 800; margin: 1rem 0; }
+    .price-amount span { font-size: 0.9rem; color: var(--text-gray); font-weight: 400; }
+
+    .table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+    .matrix-title { padding: 1.75rem 2rem; font-size: 1.35rem; font-weight: 700; border-bottom: 1px solid var(--border-color); background: #101014; }
+    
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem; }
+    th, td { padding: 1.15rem 2rem; border-bottom: 1px solid var(--border-color); }
+    th { font-weight: 700; background: rgba(255,255,255,0.02); }
+    td:not(:first-child), th:not(:first-child) { text-align: center; width: 200px; }
+    tr:last-child td { border-bottom: none; }
+    
+    .check { color: var(--brand-accent); font-weight: 800; }
+    .cross { color: var(--text-gray); opacity: 0.4; }
 
     .user-dropdown-container { position: relative; display: inline-block; }
     .user-pill-btn {
@@ -82,16 +111,6 @@
     }
     .dropdown-actions a:hover, .dropdown-actions button:hover { background: rgba(255,255,255,0.06); }
 
-    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 4rem 2rem; }
-    .hero { text-align: center; margin-bottom: 4.5rem; }
-    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem; }
-    .hero p { color: var(--text-gray); font-size: 1.1rem; max-width: 680px; margin: 0 auto; line-height: 1.6; }
-    
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-    .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2.25rem; }
-    .card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
-    .card p { color: var(--text-gray); line-height: 1.6; font-size: 0.95rem; }
-
     footer { border-top: 1px solid var(--border-color); padding: 2.5rem 2rem; text-align: center; color: var(--text-gray); font-size: 0.88rem; background: var(--panel-bg); margin-top: 4rem; }
   </style>
 </head>
@@ -107,32 +126,108 @@
       <a href="../home/">Home</a>
       <a href="../products/">Products</a>
       <a href="../solutions/">Solutions</a>
-      <a href="../resources/" class="active">Resources</a>
-      <a href="../pricing/">Pricing</a>
+      <a href="../resources/">Resources</a>
+      <a href="../pricing/" class="active">Pricing</a>
     </nav>
 
     <div class="user-nav" id="nav-actions"></div>
   </header>
 
   <main>
-    <div class="hero">
-      <h1>Developer & Creator Resources</h1>
-      <p>Documentation, API references, tutorials, and community templates to accelerate your design workflows.</p>
+    <div class="pricing-header">
+      <h1>Plans and Pricing</h1>
+      <p>Upgrade your workflow with a paid plan</p>
+      <p style="color: var(--text-gray);">or, stick to the free plan, with limited features.</p>
     </div>
 
-    <div class="grid-3">
-      <div class="card">
-        <h3>📖 Technical Documentation</h3>
-        <p>Comprehensive guides on configuring Vercel serverless functions, Gmail SMTP authentication, and vector canvas management.</p>
+    <div class="pricing-cards">
+      <div class="price-card">
+        <div>
+          <div class="price-title">Free Plan</div>
+          <p style="color: var(--text-gray); font-size: 0.88rem;">For individuals wanting simple collaborative editing</p>
+          <div class="price-amount">£0 <span>forever</span></div>
+        </div>
+        <a href="../auth/personal/register/" class="btn btn-secondary" style="width: 100%;">Create Free Account</a>
       </div>
-      <div class="card">
-        <h3>🛠️ API Reference</h3>
-        <p>Integrate Collab workspaces programmatically using our secure REST endpoints and webhooks.</p>
+
+      <div class="price-card">
+        <div>
+          <div class="price-title">Teams</div>
+          <p style="color: var(--text-gray); font-size: 0.88rem;">For small creative teams looking to scale</p>
+          <div class="price-amount">£5 <span>/month</span></div>
+        </div>
+        <a href="../auth/personal/register/" class="btn btn-primary" style="width: 100%;">Choose Teams Plan</a>
       </div>
-      <div class="card">
-        <h3>💡 Video Tutorials</h3>
-        <p>Step-by-step videos on building robust design systems and vector collaboration pipelines.</p>
+        
+      <div class="price-card featured">
+        <div>
+          <div class="price-title">Organisation</div>
+          <p style="color: var(--text-gray); font-size: 0.88rem;">For established design teams needing dedicated workspaces</p>
+          <div class="price-amount">£12 <span>/seat/month</span></div>
+        </div>
+        <a href="../auth/organisation/register/" class="btn btn-primary" style="width: 100%;">Register Organisation</a>
       </div>
+
+      <div class="price-card">
+        <div>
+          <div class="price-title">Enterprise</div>
+          <p style="color: var(--text-gray); font-size: 0.88rem;">For global brands demanding maximum security and custom SLA</p>
+          <div class="price-amount">£19 <span>/seat/month</span></div>
+        </div>
+        <a href="../auth/organisation/register/" class="btn btn-primary" style="width: 100%;">Contact Sales</a>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="matrix-title">Features Comparison</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Features</th>
+            <th>Free</th>
+            <th>Teams</th>
+            <th>Organisation</th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Vector Studio Editor Access</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Real-time Concurrency Cursors</td>
+            <td><span class="cross">—</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Shared Workspace Projects</td>
+            <td>3 Projects</td>
+            <td>5 Projects</td>
+            <td><span class="check">Unlimited</span></td>
+            <td><span class="check">Custom</span></td>
+          </tr>
+          <tr>
+            <td>Cloud Storage Space</td>
+            <td>100 MB Storage</td>
+            <td>100 GB Storage</td>
+            <td>1 TB Storage</td>
+            <td>Custom</td>
+          </tr>
+          <tr>
+            <td>Enterprise Single Sign-On (SSO)</td>
+            <td><span class="cross">—</span></td>
+            <td><span class="cross">—</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </main>
 
