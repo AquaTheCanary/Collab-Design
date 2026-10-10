@@ -1,153 +1,198 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Login | Collab Design</title>
+  <title>Personal Sign In | Collab Design</title>
   <link rel="icon" type="image/png" href="../../../logo.png">
-  <link rel="shortcut icon" type="image/png" href="../../../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Microsoft MSAL Browser Library -->
+  <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
   <style>
     :root {
       --bg-black: #0a0a0c;
       --panel-bg: #141418;
+      --card-bg: #1a1a20;
       --border-color: #2a2a32;
       --brand-accent: #0f62fe;
       --text-gray: #a0a0ab;
       --text-light: #f4f4f8;
+      --danger-red: #da1e28;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color);
-      background-color: rgba(10, 10, 12, 0.9);
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
-    .brand img { height: 34px; width: auto; object-fit: contain; }
-    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 400px; padding: 2.5rem; }
-    .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
-    .auth-card p { color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem; }
-    .form-group { margin-bottom: 1.25rem; }
+    .brand img { height: 34px; width: auto; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; }
+    .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 420px; padding: 2.25rem; }
+    .form-group { margin-bottom: 1.15rem; }
     .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
-    .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-    .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
-    .google-btn {
-      width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600;
-      cursor: pointer; border: 1px solid #dadce0; background: #fff; color: #202124;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+    .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-size: 0.9rem; }
+    .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; font-size: 0.9rem; }
+    .btn:hover { opacity: 0.9; }
+
+    /* Social Auth Buttons Container */
+    .sso-buttons { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .btn-msft {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      background: #2f2f2f;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: background 0.2s;
     }
-    .google-btn:disabled { opacity: 0.65; cursor: wait; }
-    .status { margin: 12px 0 0 !important; font-size: 0.82rem !important; line-height: 1.5; overflow-wrap: anywhere; }
-    .divider { display: flex; align-items: center; gap: 12px; color: var(--text-gray); font-size: 0.8rem; margin: 18px 0; }
-    .divider::before, .divider::after { content: ""; height: 1px; background: var(--border-color); flex: 1; }
+    .btn-msft:hover { background: #3d3d3d; }
+    .btn-msft svg { width: 18px; height: 18px; }
+
+    .divider { text-align: center; color: var(--text-gray); font-size: 0.78rem; margin: 1.25rem 0; position: relative; }
+    .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: var(--border-color); }
+    .divider::before { left: 0; } .divider::after { right: 0; }
+
+    .error-msg { color: var(--danger-red); font-size: 0.82rem; margin-bottom: 1rem; display: none; background: rgba(218,30,40,0.1); padding: 0.6rem; border-radius: 6px; border: 1px solid var(--danger-red); }
+    footer { border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-gray); font-size: 0.85rem; }
+    footer a { color: var(--text-gray); text-decoration: underline; }
   </style>
 </head>
 <body>
   <header>
-    <a href="../../../home/" class="brand">
-      <img src="../../../logo.png" alt="Collab Design Logo">
-      <span>Collab Design</span>
-    </a>
+    <a href="../../../home/" class="brand"><img src="../../../logo.png" alt="Logo"><span>Collab Design</span></a>
   </header>
 
   <main>
     <div class="auth-card">
-      <h2>Personal Login</h2>
-      <p>Sign in to your personal creator account.</p>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.35rem;">Personal Sign In</h2>
+      <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Access your personal creator workspace.</p>
 
-      <form id="personal-login">
+      <!-- SSO Buttons -->
+      <div class="sso-buttons">
+        <!-- Google SSO -->
+        <div id="g_id_onload"
+             data-client_id="216502879264-usmlgkoluughvi371rl6ajr4745vp26o.apps.googleusercontent.com"
+             data-callback="handleGoogleLogin"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-width="370"></div>
+
+        <!-- Microsoft SSO Button -->
+        <button type="button" class="btn-msft" onclick="handleMicrosoftLogin()">
+          <svg viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+            <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+            <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+            <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+          </svg>
+          <span>Sign in with Microsoft</span>
+        </button>
+      </div>
+
+      <div class="divider">OR EMAIL SIGN IN</div>
+
+      <div class="error-msg" id="login-error">Account does not exist. Please register first.</div>
+
+      <form id="login-form">
         <div class="form-group">
-          <label for="email">Email Address</label>
+          <label>Email Address</label>
           <input type="email" id="email" required placeholder="you@example.com">
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label>Password</label>
           <input type="password" id="password" required placeholder="••••••••">
         </div>
         <button type="submit" class="btn">Sign In</button>
       </form>
-
-      <div class="divider">OR</div>
-
-      <button type="button" id="googleSignInButton" class="google-btn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="">
-        Continue with Google
-      </button>
-      <p id="googleSignInStatus" class="status" role="status" aria-live="polite"></p>
-
-      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-gray);">
-        Don't have an account?
-        <a href="../register/" style="color: var(--brand-accent); text-decoration: none;">Register here</a>
-      </div>
     </div>
   </main>
 
+  <footer>
+    <p>© Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.</p>
+    <p style="margin-top: 0.5rem; font-size: 0.82rem; display: flex; gap: 1rem; justify-content: center;">
+      <a href="../../../privacy/">Privacy Policy</a>
+      <a href="../../../terms/">Terms of Service</a>
+    </p>
+  </footer>
+
   <script>
-    // Existing email/password demo login. This does not verify the password.
-    document.getElementById('personal-login').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const session = { isLoggedIn: true, email, type: 'personal' };
-      localStorage.setItem('collab_user_session', JSON.stringify(session));
-      window.location.href = '../../../home/';
-    });
-  </script>
-
-  <script type="module">
-    import { initializeApp, getApps, getApp } from
-      "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import {
-      getAuth, GoogleAuthProvider, signInWithPopup
-    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDIguTaQ3pNBH93bSNGr7ByqLdGHuoGPNI",
-      authDomain: "collab-design-sso.firebaseapp.com",
-      projectId: "collab-design-sso",
-      storageBucket: "collab-design-sso.firebasestorage.app",
-      messagingSenderId: "191158941905",
-      appId: "1:191158941905:web:95eab0f489c32e6880edf0",
-      measurementId: "G-PVGGL49FQE"
+    // 1. Initialize Microsoft MSAL Public Application
+    const msalConfig = {
+      auth: {
+        clientId: 'YOUR_MICROSOFT_CLIENT_ID', // Replace with your Azure AD Application Client ID
+        authority: 'https://login.microsoftonline.com/common',
+        redirectUri: window.location.origin
+      }
     };
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    const button = document.getElementById("googleSignInButton");
-    const status = document.getElementById("googleSignInStatus");
-
-    button.addEventListener("click", async () => {
-      button.disabled = true;
-      status.textContent = "Signing in with Google...";
-
+    // Microsoft Login Handler
+    async function handleMicrosoftLogin() {
       try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-
+        const loginResponse = await msalInstance.loginPopup({
+          scopes: ["user.read"]
+        });
+        const account = loginResponse.account;
+        
         const session = {
           isLoggedIn: true,
-          uid: user.uid,
-          name: user.displayName || "",
-          email: user.email || "",
-          photoURL: user.photoURL || "",
-          type: "personal",
-          authProvider: "google"
+          name: account.name || account.username.split('@')[0],
+          email: account.username.toLowerCase(),
+          type: 'personal',
+          plan: 'Free Tier',
+          provider: 'microsoft'
         };
 
-        localStorage.setItem("collab_user_session", JSON.stringify(session));
-        window.location.href = "../../../home/";
-      } catch (error) {
-        console.error("Google sign-in error:", error);
-        status.textContent = "Google sign-in failed: " +
-          (error.code || error.message || "Unknown error");
-      } finally {
-        button.disabled = false;
+        // Register or fetch user
+        let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+        if (!db.find(u => u.email === session.email)) {
+          db.push(session);
+          localStorage.setItem('collab_registered_users', JSON.stringify(db));
+        }
+
+        localStorage.setItem('collab_user_session', JSON.stringify(session));
+        window.location.href = '../../../dashboard/';
+      } catch (err) {
+        console.error("Microsoft login error:", err);
       }
+    }
+
+    // Google SSO Handler
+    function handleGoogleLogin(response) {
+      const base64Url = response.credential.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(window.atob(base64));
+
+      const db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+      const user = db.find(u => u.email === payload.email.toLowerCase());
+      if (!user) {
+        alert('Google account not registered. Please sign up first.');
+        return;
+      }
+      localStorage.setItem('collab_user_session', JSON.stringify(user));
+      window.location.href = '../../../dashboard/';
+    }
+
+    // Standard Email Login Form
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.toLowerCase().trim();
+      const db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+      const user = db.find(u => u.email === email && u.type === 'personal');
+      
+      if (!user) {
+        document.getElementById('login-error').style.display = 'block';
+        return;
+      }
+      localStorage.setItem('collab_user_session', JSON.stringify(user));
+      window.location.href = '../../../dashboard/';
     });
   </script>
 </body>
