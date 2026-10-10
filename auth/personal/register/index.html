@@ -1,252 +1,192 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Personal Account | Collab</title>
+  <title>Personal Register | Collab Design</title>
   <link rel="icon" type="image/png" href="../../../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
   <style>
     :root {
       --bg-black: #0a0a0c;
       --panel-bg: #141418;
+      --card-bg: #1a1a20;
       --border-color: #2a2a32;
       --brand-accent: #0f62fe;
       --text-gray: #a0a0ab;
       --text-light: #f4f4f8;
+      --danger-red: #da1e28;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
-    header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); background: rgba(10,10,12,0.8); backdrop-filter: blur(12px); }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.15rem; }
     .brand img { height: 34px; width: auto; }
-    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 440px; padding: 2.5rem; }
-    .auth-card h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.4rem; }
-    .form-group input { width: 100%; padding: 0.75rem; background: #0a0a0c; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; }
-    .btn { width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; margin-top: 0.5rem; }
-    .btn-secondary { background: transparent; border: 1px solid var(--border-color); color: #fff; }
-    .step-box { display: none; }
-    .step-box.active { display: block; }
-    .google-btn {
-      width: 100%; padding: 0.75rem; border-radius: 6px; font-weight: 600;
-      cursor: pointer; border: 1px solid #dadce0; background: #fff; color: #202124;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin-top: 14px;
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; }
+    .auth-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 460px; padding: 2.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+    .auth-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ea4335, #4285f4, #00a4ef, #0f62fe); }
+
+    .step-box { display: none; } .step-box.active { display: block; }
+    
+    .sso-stack { display: flex; flex-direction: column; gap: 0.85rem; margin: 1.5rem 0; }
+    .sso-btn {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      transition: all 0.25s;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
     }
-    .google-btn:disabled { opacity: 0.65; cursor: wait; }
-    .status { color: var(--text-gray); font-size: 0.82rem; margin-top: 12px; line-height: 1.5; overflow-wrap: anywhere; }
-    .divider { display: flex; align-items: center; gap: 12px; color: var(--text-gray); font-size: 0.8rem; margin: 18px 0 4px; }
-    .divider::before, .divider::after { content: ""; height: 1px; background: var(--border-color); flex: 1; }
+    .sso-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); }
+    .sso-btn svg { width: 20px; height: 20px; }
+
+    .divider { text-align: center; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; margin: 1.5rem 0; position: relative; }
+    .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 28%; height: 1px; background: var(--border-color); }
+    .divider::before { left: 0; } .divider::after { right: 0; }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.45rem; }
+    .form-group input { width: 100%; padding: 0.8rem; background: #08080a; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 0.92rem; }
+    .btn-submit { width: 100%; padding: 0.85rem; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; background: var(--brand-accent); color: #fff; font-size: 0.95rem; margin-top: 0.5rem; }
+    
     footer { border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-gray); font-size: 0.85rem; }
+    footer a { color: var(--text-gray); text-decoration: underline; margin: 0 0.5rem; }
   </style>
 </head>
 <body>
   <header>
-    <a href="../../../home/" class="brand">
-      <img src="../../../logo.png" alt="Collab Design Logo">
-      <span>Collab Design</span>
-    </a>
+    <a href="../../../home/" class="brand"><img src="../../../logo.png" alt="Logo"><span>Collab Design</span></a>
   </header>
 
   <main>
     <div class="auth-card">
       <div id="step-1" class="step-box active">
-        <h2>Create Personal Account</h2>
-        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 1 of 3: Profile Setup</p>
+        <h2 style="font-size: 1.6rem; font-weight: 800;">Create Creator Account</h2>
+        <p style="color: var(--text-gray); font-size: 0.88rem; margin-top: 0.35rem;">Step 1 of 3: Profile Setup</p>
 
-        <form onsubmit="handlePersonalStep1(event)">
+        <div class="sso-stack">
+          <button type="button" class="sso-btn" id="btn-google">
+            <svg viewBox="0 0 24 24">
+              <path fill="#ea4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.1 9 5 12 5z"/>
+              <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+              <path fill="#fbbc05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/>
+              <path fill="#34a853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.1-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
+            </svg>
+            <span>Sign Up with Google</span>
+          </button>
+          <button type="button" class="sso-btn" onclick="handleMicrosoftSignup()">
+            <svg viewBox="0 0 21 21">
+              <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+              <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+              <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+              <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+            </svg>
+            <span>Sign Up with Microsoft</span>
+          </button>
+        </div>
+
+        <div id="g_id_onload"
+             data-client_id="216502879264-usmlgkoluughvi371rl6ajr4745vp26o.apps.googleusercontent.com"
+             data-callback="handleGoogleSignup"
+             data-auto_prompt="false">
+        </div>
+
+        <div class="divider">OR REGISTER WITH EMAIL</div>
+
+        <form onsubmit="handleStep1(event)">
           <div class="form-group">
-            <label for="user-name">Full Name</label>
-            <input type="text" id="user-name" required placeholder="Alex Creator">
+            <label>Full Name</label>
+            <input type="text" id="reg-name" required placeholder="Alex Creator">
           </div>
           <div class="form-group">
-            <label for="user-email">Email Address</label>
-            <input type="email" id="user-email" required placeholder="you@example.com">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" required placeholder="you@example.com">
           </div>
-          <button type="submit" class="btn" id="sub-btn">Send Verification Code →</button>
+          <button type="submit" class="btn-submit">Send Verification Code →</button>
         </form>
-
-        <div class="divider">OR</div>
-        <button type="button" class="google-btn" id="googleRegisterButton">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="">
-          Sign up with Google
-        </button>
-        <p id="googleRegisterStatus" class="status" role="status" aria-live="polite"></p>
       </div>
 
       <div id="step-2" class="step-box">
-        <h2>Verify Your Email</h2>
-        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 2 of 3: Enter 6-digit code via SMTP</p>
-        <div class="form-group">
-          <label for="otp-input">Verification Code</label>
-          <input type="text" id="otp-input" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.2em;">
+        <h2 style="font-size: 1.6rem; font-weight: 800;">Email Verification</h2>
+        <p style="color: var(--text-gray); font-size: 0.88rem; margin-top: 0.35rem;">Step 2 of 3: Enter 6-digit OTP sent via SMTP</p>
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <input type="text" id="otp-input" placeholder="123456" maxlength="6" style="text-align: center; font-size: 1.3rem; letter-spacing: 0.3em;">
         </div>
-        <button type="button" class="btn" onclick="verifyPersonalOTP()">Verify Code →</button>
+        <button type="button" class="btn-submit" onclick="verifyOTP()">Verify Code →</button>
       </div>
 
       <div id="step-3" class="step-box">
-        <h2>Choose Creator Tier</h2>
-        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 1.5rem;">Step 3 of 3: Select Plan</p>
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <button type="button" class="btn" onclick="finalizePersonal('Personal Pro ($12/mo)')">Upgrade to Personal Pro ($12/mo)</button>
-          <button type="button" class="btn btn-secondary" onclick="finalizePersonal('Free Tier')">Stick to Personal Free Tier</button>
+        <h2 style="font-size: 1.6rem; font-weight: 800;">Choose Plan</h2>
+        <p style="color: var(--text-gray); font-size: 0.88rem; margin-top: 0.35rem;">Step 3 of 3: Select Creator Tier</p>
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+          <button class="btn-submit" onclick="finalize('Personal Pro (£12/mo)')">Upgrade to Personal Pro (£12/mo)</button>
+          <button class="btn-submit" style="background: transparent; border: 1px solid var(--border-color);" onclick="finalize('Free Tier')">Stick to Personal Free Tier</button>
         </div>
       </div>
     </div>
   </main>
 
   <footer>
-    © Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.
+    <p>© Copyright (c) Collab Design 2026. A Convex Company. All rights reserved.</p>
+    <p style="margin-top: 0.5rem;"><a href="../../../privacy/">Privacy Policy</a><a href="../../../terms/">Terms of Service</a></p>
   </footer>
 
   <script>
-    let pName = '', pEmail = '', generatedOTP = '';
-    let pFirebaseUid = '', pAuthProvider = 'email', pPhotoURL = '';
+    document.getElementById('btn-google').addEventListener('click', () => google.accounts.id.prompt());
 
-    // Called by the Firebase module after Google authentication succeeds.
-    window.startGooglePersonalRegistration = function(name, email, uid, photoURL) {
-      pName = name || '';
-      pEmail = email || '';
-      pFirebaseUid = uid || '';
-      pAuthProvider = 'google';
-      pPhotoURL = photoURL || '';
+    let pData = { name: '', email: '' }, generatedOTP = '';
 
-      document.getElementById('user-name').value = pName;
-      document.getElementById('user-email').value = pEmail;
-
-      document.getElementById('step-1').classList.remove('active');
-      document.getElementById('step-2').classList.remove('active');
-      document.getElementById('step-3').classList.add('active');
-    };
-
-    async function handlePersonalStep1(e) {
+    async function handleStep1(e) {
       e.preventDefault();
-      pName = document.getElementById('user-name').value.trim();
-      pEmail = document.getElementById('user-email').value.trim();
-      pFirebaseUid = '';
-      pAuthProvider = 'email';
-      pPhotoURL = '';
-
+      pData.name = document.getElementById('reg-name').value.trim();
+      pData.email = document.getElementById('reg-email').value.toLowerCase().trim();
       generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-
-      try {
-        await fetch('/api/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: pEmail, code: generatedOTP })
-        });
-      } catch (err) {
-        console.warn('OTP request failed. Demo OTP code:', generatedOTP);
-      }
-
-      alert(`[Demo Mode] Verification code: ${generatedOTP}`);
+      try { await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: pData.email, code: generatedOTP }) }); } catch(e){}
+      alert(`[SMTP Demo Code]: ${generatedOTP}`);
       document.getElementById('step-1').classList.remove('active');
       document.getElementById('step-2').classList.add('active');
     }
 
-    function verifyPersonalOTP() {
-      const code = document.getElementById('otp-input').value.trim();
-      if (code === generatedOTP && generatedOTP !== '') {
+    function verifyOTP() {
+      if (document.getElementById('otp-input').value.trim() === generatedOTP) {
         document.getElementById('step-2').classList.remove('active');
         document.getElementById('step-3').classList.add('active');
-      } else {
-        alert('Incorrect verification code.');
-      }
+      } else alert('Invalid verification code.');
     }
 
-    function finalizePersonal(plan) {
-      const session = {
-        isLoggedIn: true,
-        uid: pFirebaseUid || undefined,
-        name: pName,
-        email: pEmail,
-        photoURL: pPhotoURL || undefined,
-        type: 'personal',
-        plan: plan,
-        authProvider: pAuthProvider
-      };
-
-      let db;
-      try {
-        db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
-        if (!Array.isArray(db)) db = [];
-      } catch (error) {
-        db = [];
-      }
-
-      // Avoid adding a duplicate Google profile every time it signs up again.
-      const existingIndex = pFirebaseUid
-        ? db.findIndex(user => user.uid === pFirebaseUid)
-        : -1;
-
-      if (existingIndex >= 0) {
-        db[existingIndex] = { ...db[existingIndex], ...session };
-      } else {
-        db.push(session);
-      }
-
+    function finalize(plan) {
+      const session = { isLoggedIn: true, name: pData.name, email: pData.email, type: 'personal', plan };
+      let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+      db.push(session);
       localStorage.setItem('collab_registered_users', JSON.stringify(db));
       localStorage.setItem('collab_user_session', JSON.stringify(session));
       window.location.href = '../../../dashboard/';
     }
-  </script>
 
-  <script type="module">
-    import { initializeApp, getApps, getApp } from
-      "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import {
-      getAuth, GoogleAuthProvider, signInWithPopup
-    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    function handleGoogleSignup(res) {
+      const payload = JSON.parse(atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      pData = { name: payload.name, email: payload.email.toLowerCase() };
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-3').classList.add('active');
+    }
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDIguTaQ3pNBH93bSNGr7ByqLdGHuoGPNI",
-      authDomain: "collab-design-sso.firebaseapp.com",
-      projectId: "collab-design-sso",
-      storageBucket: "collab-design-sso.firebasestorage.app",
-      messagingSenderId: "191158941905",
-      appId: "1:191158941905:web:95eab0f489c32e6880edf0",
-      measurementId: "G-PVGGL49FQE"
-    };
-
-    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    const button = document.getElementById("googleRegisterButton");
-    const status = document.getElementById("googleRegisterStatus");
-
-    button.addEventListener("click", async () => {
-      button.disabled = true;
-      status.textContent = "Connecting to Google...";
-
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-
-        if (!user.email) {
-          throw new Error("Your Google account did not provide an email address.");
-        }
-
-        window.startGooglePersonalRegistration(
-          user.displayName || "",
-          user.email,
-          user.uid,
-          user.photoURL || ""
-        );
-      } catch (error) {
-        console.error("Google registration error:", error);
-        status.textContent = "Google sign-up failed: " +
-          (error.code || error.message || "Unknown error");
-      } finally {
-        button.disabled = false;
-      }
-    });
+    async function handleMicrosoftSignup() {
+      const msalInstance = new msal.PublicClientApplication({ auth: { clientId: 'YOUR_MICROSOFT_CLIENT_ID', redirectUri: window.location.origin } });
+      const res = await msalInstance.loginPopup({ scopes: ["user.read"] });
+      pData = { name: res.account.name || res.account.username.split('@')[0], email: res.account.username.toLowerCase() };
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-3').classList.add('active');
+    }
   </script>
 </body>
 </html>
-
