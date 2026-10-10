@@ -5,25 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Studio Editor | Collab</title>
   <link rel="icon" type="image/png" href="../logo.png">
-  <link rel="shortcut icon" type="image/png" href="../logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-black: #08080a;
-      --panel-bg: #121216;
-      --border-color: #22222a;
-      --brand-accent: #0f62fe;
-      --text-gray: #888892;
-      --text-light: #f4f4f8;
-    }
+    :root { --bg-black: #08080a; --panel-bg: #121216; --border-color: #22222a; --brand-accent: #0f62fe; --text-gray: #888892; --text-light: #f4f4f8; --danger-red: #da1e28; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.6rem 1.5rem; border-bottom: 1px solid var(--border-color);
-      background-color: var(--panel-bg);
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.5rem; border-bottom: 1px solid var(--border-color); background: var(--panel-bg); }
     .brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; font-weight: 700; font-size: 1rem; }
     .brand img { height: 28px; width: auto; }
 
@@ -35,21 +23,21 @@
     .layer-item.active { background: rgba(15, 98, 254, 0.2); border-left: 3px solid var(--brand-accent); }
 
     .viewport { flex: 1; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
-    .toolbar { position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.4rem; display: flex; gap: 0.5rem; z-index: 100; }
-    .tool-btn { padding: 0.5rem 0.85rem; background: transparent; border: none; color: var(--text-gray); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+    .toolbar { position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.4rem; display: flex; gap: 0.4rem; z-index: 100; }
+    .tool-btn { padding: 0.45rem 0.75rem; background: transparent; border: none; color: var(--text-gray); border-radius: 4px; cursor: pointer; font-size: 0.82rem; font-weight: 600; }
     .tool-btn.active, .tool-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
     #design-canvas { background: #1a1a20; border: 1px solid var(--border-color); cursor: crosshair; }
 
-    .right-bar { width: 260px; background: var(--panel-bg); border-left: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .right-bar { width: 260px; background: var(--panel-bg); border-left: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; gap: 1.25rem; overflow-y: auto; }
     .prop-group { display: flex; flex-direction: column; gap: 0.4rem; }
     .prop-group label { font-size: 0.78rem; color: var(--text-gray); }
-    .prop-row input { width: 100%; padding: 0.4rem; background: #08080a; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; }
+    .prop-row input { width: 100%; padding: 0.45rem; background: #08080a; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-size: 0.85rem; }
 
     .btn { padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; border: none; font-weight: 600; text-decoration: none; text-align: center; }
     .btn-primary { background: var(--brand-accent); color: #fff; }
     .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border-color); }
-
+    
     .gate-screen { position: fixed; inset: 0; background: var(--bg-black); display: flex; align-items: center; justify-content: center; z-index: 3000; text-align: center; padding: 2rem; }
     .gate-card { background: var(--panel-bg); border: 1px solid var(--border-color); padding: 3rem 2rem; border-radius: 16px; max-width: 440px; width: 100%; }
   </style>
@@ -58,19 +46,16 @@
 
   <div class="gate-screen" id="auth-gate" style="display: none;">
     <div class="gate-card">
-      <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Access Restricted</h2>
-      <p style="color: var(--text-gray); margin-bottom: 2rem;">Please sign in to launch the Collab Canvas Studio.</p>
-      <a href="../home/" class="btn btn-primary" style="width: 100%;">Return to Home & Log In</a>
+      <h2>Access Restricted</h2>
+      <p style="color: var(--text-gray); margin: 1rem 0 2rem;">Please sign in to launch the Canvas Studio.</p>
+      <a href="../home/" class="btn btn-primary" style="display: block;">Return to Home & Log In</a>
     </div>
   </div>
 
   <header id="main-header">
-    <a href="../home/" class="brand">
-      <img src="../logo.png" alt="Collab Design Logo">
-      <span>Collab Studio</span>
-    </a>
-    <div style="font-size: 0.88rem; color: var(--text-gray);">File: Interactive_Canvas_V1</div>
-    <a href="../dashboard/" class="btn btn-secondary">Exit Studio</a>
+    <a href="../home/" class="brand"><img src="../logo.png" alt="Logo"><span>Collab Studio</span></a>
+    <div style="font-size: 0.88rem; color: var(--text-gray);">Vector Annotation Engine</div>
+    <a href="../dashboard/" class="btn btn-secondary">Dashboard</a>
   </header>
 
   <div class="editor-layout" id="main-layout">
@@ -81,31 +66,38 @@
 
     <main class="viewport">
       <div class="toolbar">
-        <button class="tool-btn active" id="btn-select" onclick="setTool('select')">🖐️ Select / Drag</button>
-        <button class="tool-btn" id="btn-rect" onclick="setTool('rect')">🟦 Rectangle</button>
+        <button class="tool-btn active" id="btn-select" onclick="setTool('select')">🖐️ Select</button>
+        <button class="tool-btn" id="btn-rect" onclick="setTool('rect')">🟦 Rect</button>
         <button class="tool-btn" id="btn-circle" onclick="setTool('circle')">⭕ Circle</button>
-        <button class="tool-btn" onclick="deleteSelected()">🗑️ Delete</button>
+        <button class="tool-btn" id="btn-triangle" onclick="setTool('triangle')">🔺 Triangle</button>
+        <button class="tool-btn" id="btn-line" onclick="setTool('line')">📏 Line</button>
+        <button class="tool-btn" id="btn-text" onclick="setTool('text')">✍️ Text</button>
+        <button class="tool-btn" onclick="deleteSelected()" style="color: var(--danger-red);">🗑️</button>
       </div>
 
-      <canvas id="design-canvas" width="800" height="500"></canvas>
+      <canvas id="design-canvas" width="850" height="520"></canvas>
     </main>
 
     <aside class="right-bar">
-      <div class="panel-title">Inspector</div>
+      <div class="panel-title">Properties Inspector</div>
       <div class="prop-group">
-        <label>Object Fill Color</label>
-        <input type="color" id="fill-picker" value="#0f62fe" onchange="updateFill()">
+        <label>Color / Fill</label>
+        <div class="prop-row"><input type="color" id="fill-picker" value="#0f62fe" onchange="updateProp('color', this.value)"></div>
       </div>
-      <button class="btn btn-primary" onclick="exportPNG()">Export Canvas Image</button>
+      <div class="prop-group" id="text-group" style="display:none;">
+        <label>Text Content</label>
+        <div class="prop-row"><input type="text" id="text-val" oninput="updateProp('text', this.value)"></div>
+      </div>
+      <button class="btn btn-primary" onclick="saveAndExport()">Save & Export PNG</button>
     </aside>
   </div>
 
   <script>
-    let canvas, ctx, isDragging = false, dragOffset = { x: 0, y: 0 };
-    let activeTool = 'select', selectedIndex = null;
+    let canvas, ctx, activeTool = 'select', selectedIndex = null;
+    let isDrawing = false, startX = 0, startY = 0, currentPreview = null;
     let shapes = [
-      { type: 'rect', x: 100, y: 100, w: 200, h: 120, color: '#0f62fe' },
-      { type: 'circle', x: 450, y: 200, r: 60, color: '#428be5' }
+      { type: 'rect', x: 80, y: 80, w: 220, h: 120, color: '#0f62fe', lineWidth: 2 },
+      { type: 'circle', x: 450, y: 150, r: 60, color: '#428be5', lineWidth: 2 }
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -116,14 +108,11 @@
         document.getElementById('main-layout').style.display = 'none';
         return;
       }
-
       canvas = document.getElementById('design-canvas');
       ctx = canvas.getContext('2d');
-
       canvas.addEventListener('mousedown', onMouseDown);
       canvas.addEventListener('mousemove', onMouseMove);
-      canvas.addEventListener('mouseup', () => isDragging = false);
-
+      canvas.addEventListener('mouseup', onMouseUp);
       render();
     });
 
@@ -134,81 +123,105 @@
     }
 
     function onMouseDown(e) {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const r = canvas.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
 
-      if (activeTool === 'rect') {
-        shapes.push({ type: 'rect', x: x - 50, y: y - 30, w: 100, h: 60, color: document.getElementById('fill-picker').value });
-        selectedIndex = shapes.length - 1;
-      } else if (activeTool === 'circle') {
-        shapes.push({ type: 'circle', x: x, y: y, r: 40, color: document.getElementById('fill-picker').value });
-        selectedIndex = shapes.length - 1;
-      } else if (activeTool === 'select') {
+      if (activeTool === 'select') {
         selectedIndex = null;
         for (let i = shapes.length - 1; i >= 0; i--) {
           const s = shapes[i];
-          if (s.type === 'rect' && x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h) {
-            selectedIndex = i;
-            isDragging = true;
-            dragOffset = { x: x - s.x, y: y - s.y };
-            break;
-          } else if (s.type === 'circle' && Math.hypot(x - s.x, y - s.y) <= s.r) {
-            selectedIndex = i;
-            isDragging = true;
-            dragOffset = { x: x - s.x, y: y - s.y };
-            break;
-          }
+          if ((s.type === 'rect' || s.type === 'triangle') && x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h) { selectedIndex = i; break; }
+          if (s.type === 'circle' && Math.hypot(x - s.x, y - s.y) <= s.r) { selectedIndex = i; break; }
         }
+        populateInspector();
+      } else if (activeTool === 'text') {
+        const textVal = prompt('Enter text annotation:', 'Collab Annotation');
+        if (textVal) {
+          shapes.push({ type: 'text', x, y, text: textVal, color: document.getElementById('fill-picker').value, lineWidth: 16 });
+          selectedIndex = shapes.length - 1;
+        }
+        setTool('select');
+      } else {
+        isDrawing = true; startX = x; startY = y;
       }
       render();
     }
 
     function onMouseMove(e) {
-      if (!isDragging || selectedIndex === null) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      if (!isDrawing) return;
+      const r = canvas.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const color = document.getElementById('fill-picker').value;
 
-      shapes[selectedIndex].x = x - dragOffset.x;
-      shapes[selectedIndex].y = y - dragOffset.y;
+      if (activeTool === 'rect') {
+        currentPreview = { type: 'rect', x: Math.min(startX, x), y: Math.min(startY, y), w: Math.abs(x - startX), h: Math.abs(y - startY), color, lineWidth: 2 };
+      } else if (activeTool === 'circle') {
+        currentPreview = { type: 'circle', x: startX, y: startY, r: Math.hypot(x - startX, y - startY), color, lineWidth: 2 };
+      } else if (activeTool === 'triangle') {
+        currentPreview = { type: 'triangle', x: Math.min(startX, x), y: Math.min(startY, y), w: Math.abs(x - startX), h: Math.abs(y - startY), color, lineWidth: 2 };
+      } else if (activeTool === 'line') {
+        currentPreview = { type: 'line', x: startX, y: startY, x2: x, y2: y, color, lineWidth: 2 };
+      }
+      render();
+    }
+
+    function onMouseUp() {
+      if (!isDrawing) return;
+      isDrawing = false;
+      if (currentPreview) { shapes.push(currentPreview); selectedIndex = shapes.length - 1; currentPreview = null; populateInspector(); }
       render();
     }
 
     function render() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      shapes.forEach((s, idx) => {
-        ctx.fillStyle = s.color;
-        if (s.type === 'rect') ctx.fillRect(s.x, s.y, s.w, s.h);
-        else if (s.type === 'circle') {
-          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
-        }
+      const all = currentPreview ? [...shapes, currentPreview] : shapes;
 
-        if (idx === selectedIndex) {
-          ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
-          if (s.type === 'rect') ctx.strokeRect(s.x - 2, s.y - 2, s.w + 4, s.h + 4);
-          else if (s.type === 'circle') { ctx.beginPath(); ctx.arc(s.x, s.y, s.r + 3, 0, Math.PI * 2); ctx.stroke(); }
+      all.forEach((s, idx) => {
+        ctx.fillStyle = s.color; ctx.strokeStyle = s.color; ctx.lineWidth = s.lineWidth || 2;
+        if (s.type === 'rect') ctx.fillRect(s.x, s.y, s.w, s.h);
+        else if (s.type === 'circle') { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill(); }
+        else if (s.type === 'triangle') { ctx.beginPath(); ctx.moveTo(s.x + s.w/2, s.y); ctx.lineTo(s.x, s.y + s.h); ctx.lineTo(s.x + s.w, s.y + s.h); ctx.closePath(); ctx.fill(); }
+        else if (s.type === 'line') { ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x2, s.y2); ctx.stroke(); }
+        else if (s.type === 'text') { ctx.font = `${s.lineWidth || 16}px Inter`; ctx.fillText(s.text, s.x, s.y); }
+
+        if (idx === selectedIndex && !currentPreview) {
+          ctx.strokeStyle = '#0f62fe'; ctx.lineWidth = 2;
+          if (s.type === 'rect' || s.type === 'triangle') ctx.strokeRect(s.x - 3, s.y - 3, s.w + 6, s.h + 6);
+          if (s.type === 'circle') { ctx.beginPath(); ctx.arc(s.x, s.y, s.r + 4, 0, Math.PI * 2); ctx.stroke(); }
         }
       });
 
       document.getElementById('layer-tree').innerHTML = shapes.map((s, idx) => `
-        <li class="layer-item ${idx === selectedIndex ? 'active' : ''}" onclick="selectedIndex=${idx};render();">
-          <span>${s.type === 'rect' ? 'Rectangle' : 'Circle'} ${idx + 1}</span>
+        <li class="layer-item ${idx === selectedIndex ? 'active' : ''}" onclick="selectedIndex=${idx};populateInspector();render();">
+          <span>${s.type.toUpperCase()} ${idx + 1}</span><span style="color:${s.color}">■</span>
         </li>
       `).join('');
     }
 
-    function updateFill() {
-      if (selectedIndex !== null) { shapes[selectedIndex].color = document.getElementById('fill-picker').value; render(); }
+    function populateInspector() {
+      if (selectedIndex === null || !shapes[selectedIndex]) return;
+      const s = shapes[selectedIndex];
+      document.getElementById('fill-picker').value = s.color || '#0f62fe';
+      const tg = document.getElementById('text-group');
+      if (s.type === 'text') { tg.style.display = 'flex'; document.getElementById('text-val').value = s.text; }
+      else { tg.style.display = 'none'; }
+    }
+
+    function updateProp(prop, val) {
+      if (selectedIndex !== null && shapes[selectedIndex]) { shapes[selectedIndex][prop] = val; render(); }
     }
 
     function deleteSelected() {
-      if (selectedIndex !== null) { shapes.splice(selectedIndex, 1); selectedIndex = null; render(); }
+      if (selectedIndex !== null) { shapes.splice(selectedIndex, 1); selectedIndex = null; document.getElementById('text-group').style.display = 'none'; render(); }
     }
 
-    function exportPNG() {
-      const a = document.createElement('a');
-      a.download = 'collab-canvas-export.png'; a.href = canvas.toDataURL(); a.click();
+    function saveAndExport() {
+      const dataURL = canvas.toDataURL();
+      let p = JSON.parse(localStorage.getItem('collab_user_projects')) || [];
+      p.unshift({ title: 'Vector Studio Export', thumb: dataURL, date: 'Just now' });
+      localStorage.setItem('collab_user_projects', JSON.stringify(p));
+      const a = document.createElement('a'); a.download = 'collab-export.png'; a.href = dataURL; a.click();
+      window.location.href = '../dashboard/';
     }
   </script>
 </body>
