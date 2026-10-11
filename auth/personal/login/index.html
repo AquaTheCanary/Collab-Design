@@ -9,16 +9,7 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
   <style>
-    :root {
-      --bg-black: #0a0a0c;
-      --panel-bg: #141418;
-      --card-bg: #1a1a20;
-      --border-color: #2a2a32;
-      --brand-accent: #0f62fe;
-      --text-gray: #a0a0ab;
-      --text-light: #f4f4f8;
-      --danger-red: #da1e28;
-    }
+    :root { --bg-black: #0a0a0c; --panel-bg: #141418; --border-color: #2a2a32; --brand-accent: #0f62fe; --text-gray: #a0a0ab; --text-light: #f4f4f8; --danger-red: #da1e28; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: var(--bg-black); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
     header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 2rem; border-bottom: 1px solid var(--border-color); background: rgba(10,10,12,0.8); backdrop-filter: blur(12px); }
@@ -40,8 +31,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.85rem;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
+      transition: all 0.25s ease;
       border: 1px solid var(--border-color);
       background: rgba(255,255,255,0.03);
       color: #fff;
@@ -78,21 +68,13 @@
   <main>
     <div class="auth-card">
       <h2 style="font-size: 1.6rem; font-weight: 800;">Personal Sign In</h2>
-      <p style="color: var(--text-gray); font-size: 0.88rem; margin-top: 0.35rem;">Welcome back! Access your creator workspace.</p>
+      <p style="color: var(--text-gray); font-size: 0.88rem; margin-top: 0.35rem;">Welcome back! Sign in to get going again...</p>
 
       <div class="sso-stack">
-        <!-- Custom Google SSO Button -->
-        <button type="button" class="sso-btn" id="btn-google">
-          <svg viewBox="0 0 24 24">
-            <path fill="#ea4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.1 9 5 12 5z"/>
-            <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-            <path fill="#fbbc05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/>
-            <path fill="#34a853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.1-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
-          </svg>
-          <span>Continue with Google</span>
-        </button>
+        <!-- Rendered Google Button Container -->
+        <div id="google-signin-btn" style="width: 100%; display: flex; justify-content: center;"></div>
 
-        <!-- Custom Microsoft SSO Button -->
+        <!-- Microsoft SSO Button -->
         <button type="button" class="sso-btn" onclick="handleMicrosoftLogin()">
           <svg viewBox="0 0 21 21">
             <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
@@ -104,25 +86,12 @@
         </button>
       </div>
 
-      <div id="g_id_onload"
-           data-client_id="216502879264-usmlgkoluughvi371rl6ajr4745vp26o.apps.googleusercontent.com"
-           data-callback="handleGoogleLogin"
-           data-auto_prompt="false">
-      </div>
-
-      <div class="divider">OR WORK WITH EMAIL</div>
-
+      <div class="divider">Sign in with email and password</div>
       <div class="error-msg" id="login-error">Account does not exist. Please register first.</div>
 
       <form id="login-form">
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="email" required placeholder="you@example.com">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="password" required placeholder="••••••••">
-        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="email" required placeholder="you@example.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="password" required placeholder="••••••••"></div>
         <button type="submit" class="btn-submit">Sign In →</button>
       </form>
       <p style="text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 1.25rem;">Don't have an account? <a href="../register/" style="color: var(--brand-accent); text-decoration: none; font-weight: 600;">Sign up</a></p>
@@ -135,18 +104,38 @@
   </footer>
 
   <script>
-    document.getElementById('btn-google').addEventListener('click', () => {
-      google.accounts.id.prompt();
-    });
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: '216502879264-usmlgkoluughvi371rl6ajr4745vp26o.apps.googleusercontent.com',
+        callback: handleGoogleLogin
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('google-signin-btn'),
+        { theme: 'filled_black', size: 'large', width: 376 }
+      );
+    };
 
-    const msalConfig = {
+    function handleGoogleLogin(res) {
+      const payload = JSON.parse(atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const email = payload.email.toLowerCase();
+      let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
+      let user = db.find(u => u.email === email);
+      if (!user) {
+        user = { isLoggedIn: true, name: payload.name, email, type: 'personal', plan: 'Free Tier', avatar: payload.picture };
+        db.push(user);
+        localStorage.setItem('collab_registered_users', JSON.stringify(db));
+      }
+      localStorage.setItem('collab_user_session', JSON.stringify(user));
+      window.location.href = '../../../dashboard/';
+    }
+
+    const msalInstance = new msal.PublicClientApplication({
       auth: {
-        clientId: 'YOUR_MICROSOFT_CLIENT_ID',
+        clientId: '3bb3fd32-a4a1-4c64-a0e7-8af5ac6323de',
         authority: 'https://login.microsoftonline.com/common',
         redirectUri: window.location.origin
       }
-    };
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
+    });
 
     async function handleMicrosoftLogin() {
       try {
@@ -161,21 +150,7 @@
         }
         localStorage.setItem('collab_user_session', JSON.stringify(user));
         window.location.href = '../../../dashboard/';
-      } catch (err) { console.error(err); }
-    }
-
-    function handleGoogleLogin(response) {
-      const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-      const email = payload.email.toLowerCase();
-      let db = JSON.parse(localStorage.getItem('collab_registered_users')) || [];
-      let user = db.find(u => u.email === email);
-      if (!user) {
-        user = { isLoggedIn: true, name: payload.name, email, type: 'personal', plan: 'Free Tier' };
-        db.push(user);
-        localStorage.setItem('collab_registered_users', JSON.stringify(db));
-      }
-      localStorage.setItem('collab_user_session', JSON.stringify(user));
-      window.location.href = '../../../dashboard/';
+      } catch (err) { console.error("Microsoft login error:", err); }
     }
 
     document.getElementById('login-form').addEventListener('submit', (e) => {
